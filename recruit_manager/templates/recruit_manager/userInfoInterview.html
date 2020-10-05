@@ -1,0 +1,561 @@
+
+<div class="layui-card">
+    <div class="layui-card-header" id="interviewStatus">目前环节：同意面试 19年3月28日 下午两点</div>
+    <div class="layui-card-header">沟通思路</div>
+    <div class="layui-card-body layui-row layui-col-space10">
+
+        <ul id="baiying_detail_li2" class="layui-timeline">
+
+            <li class="layui-timeline-item">
+                <div class="layui-timeline-content layui-text">
+                    <h3 class="layui-timeline-title">筛选环节</h3>
+                <p id="baiying_detail2" style="display: none" > <p id="baiying_detail_seconds2">
+                </p>
+             <p>
+                 <span>
+                        <audio id="baiying_detail_luyin" src="" controls="controls">
+                            your browser does not support the audio element
+                        </audio>       
+                         <button class="layui-btn layui-btn-xs" id="wenziBtn" style="display:inline;">文字对话
+                        </button>  
+                    </span>           
+                </p>
+                   
+                </div>
+            </li>
+        </ul>
+
+        <script type="text/javascript">
+            layui.use('layer', function(){
+             var $ = layui.jquery, layer = layui.layer;
+              $(document).on('click','#wenziBtn',function(){
+            content=$('#baiying_detail2').val()
+                 layer.open({
+                   type: 1, 
+                    content: content,   
+                   area: ['1000px', '400px'],
+                  resize:false
+               });
+             });
+         });
+        </script>
+
+<ul style="display: none" id="yaoyue_detail_li" class="layui-timeline">
+
+    <li class="layui-timeline-item">
+        <div class="layui-timeline-content layui-text">
+            <h3 class="layui-timeline-title">邀约环节</h3>
+     <p>
+        <span class="layui-col-sm12" id="yaoyue_userTagPanel">
+        </p>
+        <p>
+         <span>
+                <audio id="yaoyue_detail_luyin" src="" controls="controls">
+                    your browser does not support the audio element
+                </audio>       
+            </span>           
+        </p>
+           
+        </div>
+    </li>
+</ul>
+<ul style="display: none" id="offer_detail_li" class="layui-timeline">
+
+    <li class="layui-timeline-item">
+        <div class="layui-timeline-content layui-text">
+            <h3 class="layui-timeline-title">OFFER环节</h3>
+     <p>
+        <span class="layui-col-sm12" id="offer_userTagPanel">
+        </p>
+        <p>
+         <span>
+                <audio id="offer_detail_luyin" src="" controls="controls">
+                    your browser does not support the audio element
+                </audio>       
+            </span>           
+        </p>
+           
+        </div>
+    </li>
+</ul>
+<ul style="display: none" id="ruzhi_detail_li" class="layui-timeline">
+
+    <li class="layui-timeline-item">
+        <div class="layui-timeline-content layui-text">
+            <h3 class="layui-timeline-title">入职环节</h3>
+     <p>
+        <span class="layui-col-sm12" id="ruzhi_userTagPanel">
+        </p>
+         <p>
+         <span>
+                <audio id="ruzhi_detail_luyin" src="" controls="controls">
+                    your browser does not support the audio element
+                </audio>       
+            </span>           
+        </p>
+           
+        </div>
+    </li>
+</ul>
+
+
+
+
+     <ul style="display: none" id="baiying_detail_li" class="layui-timeline">
+        <input id="text_yaoyue_resumeinfo_username" name="text_yaoyue_resumeinfo_username" type="hidden"  value='{{ resume.username }}'/> 
+        <input id="text_yaoyueinfo_contact_phone" name="text_yaoyueinfo_contact_phone" type="hidden"  value='{{ resume.contact_phone}}'/> 
+
+        <div class="" >
+              短信内容：<textarea class="" id="text_yaoyueinfo_duanxin" style="height:200px;width: 250px;" placeholder="短信内容" class="layui-textarea"></textarea>
+           
+          </div>  
+          <div class="">
+            <button id="fuzhiYaoyueDuanxin" type="button" class="layui-btn layui-btn-xs fuzhiYaoyueDuanxin">复制短信</button>
+            <button type="button" id="sendYaoyueMessageEntry" class="layui-btn layui-btn-xs sendYaoyueMessageEntry">发送邀约短信</button>
+          </div>  
+          <script type="text/javascript">
+             var project_info = JSON.parse(localStorage.getItem('project_info'));
+             var resume_info = JSON.parse(localStorage.getItem('resume_info'));
+             var text_yaoyueinfo_duanxin = project_info.yaoyuemuban;
+    text_yaoyueinfo_duanxin =text_yaoyueinfo_duanxin.replace('【姓名】', document.getElementById("text_yaoyue_resumeinfo_username").value);
+    text_yaoyueinfo_duanxin =text_yaoyueinfo_duanxin.replace('【岗位】', project_info.name);
+    $('#text_yaoyueinfo_duanxin').val(text_yaoyueinfo_duanxin)   
+
+    $(document).on('click', '#fuzhiYaoyueDuanxin', function () { 
+    //console.log('已复制好，可贴粘。'); 
+    //changeOfferDuanxin();
+    var Url3=document.getElementById("text_yaoyueinfo_duanxin");
+    Url3.select(); // 选择对象
+    document.execCommand("Copy"); // 执行浏览器复制命令
+  //  alert("已复制好，可贴粘。");
+    layer.msg('已复制好，可贴粘。');
+     });
+
+  
+
+          </script>      
+    </ul>
+
+        <ul style="display: none" id="baiying_detail_li2" class="layui-timeline">
+
+            <li class="layui-timeline-item">
+                <div class="layui-timeline-content layui-text">
+                    <h3 class="layui-timeline-title">百应AI结果</h3>
+                    聊天时长:<p id="baiying_detail_seconds">
+                </p>
+                    标签:<p id="baiying_detail_tags">
+                </p>
+                    聊天过程:<br/><textarea style="width: 100%;height: 300px;" id="baiying_detail">
+                    </textarea>
+                </div>
+            </li>
+        </ul>
+        <ul style="display: none" id="huashuzhiyin_li" class="layui-timeline" >
+            <li class="layui-timeline-item" style="margin-bottom: 20px">
+                <div class="layui-timeline-content layui-text">
+                    <h3 class="layui-timeline-title">关键词</h3>
+                    <!-- 显示一个button列表 悬浮有具体提示 -->
+                    <p id="show_keywords">
+
+                    </p>
+                </div>
+            </li>
+            <li class="layui-timeline-item" style="display: none" >
+                <div class="layui-timeline-content layui-text">
+                    <h3 class="layui-timeline-title">必问问题</h3>
+                    <p id="question">
+                    </p>
+                    <br>
+                    <span>
+                        <div style="display: inline">
+                        <input placeholder="请输入用户答复"  style="display: inline;width: 70%" class="layui-input" value="" id="answer">
+                            <button class="layui-btn layui-btn-xs" id="saveAnswerBtn" style="display:inline;">保存
+                        </button>
+                    </div>
+
+                    </span>
+
+                </div>
+            </li>
+            <li class="layui-timeline-item">
+                <div class="layui-timeline-content layui-text">
+<!--                    <h3 class="layui-timeline-title">话术指引</h3>-->
+                    <p id="projectTaskHint">
+                    </p>
+                </div>
+            </li>
+
+            <!--            <li style="display: none" id="baiying_detail_li" class="layui-timeline-item">-->
+            <!--                <div class="layui-timeline-content layui-text">-->
+            <!--                    <h3 class="layui-timeline-title">百应AI结果</h3>-->
+            <!--                    聊天时长:<p id="baiying_detail_seconds">-->
+            <!--                    </p>-->
+            <!--                    标签:<p id="baiying_detail_tags">-->
+            <!--                    </p>-->
+            <!--                    聊天过程:<br/><textarea style="width: 100%;height: 300px;" id="baiying_detail">-->
+            <!--                    </textarea>-->
+            <!--                </div>-->
+            <!--            </li>-->
+
+
+            <li class="layui-timeline-item">
+                <div class="layui-timeline-content layui-text">
+<!--                    <h3 class="layui-timeline-title">开场白:</h3>-->
+                    <p id="prologue">
+                    </p>
+                </div>
+            </li>
+
+            <style>
+                .inline {
+                    display: inline;
+                }
+            </style>
+
+            <li class="layui-timeline-item">
+                <div class="layui-timeline-content layui-text">
+                    <form>
+                        <div class="form-group">
+                            <label class="col-form-label">工作状态</label>
+                            <div class="inline">
+                                <input type="radio" id="huey" name="work_status" value="1">
+                                <label for="huey">在职,不找工作</label>
+                            </div>
+
+                            <div class="inline">
+                                <input type="radio" id="dewey" name="work_status" value="2">
+                                <label for="dewey">在职,考虑新机会</label>
+                            </div>
+
+                            <div class="inline">
+                                <input type="radio" id="louie" name="work_status" value="3">
+                                <label for="louie">离职,正在找工作</label>
+                            </div>
+                            <div class="inline">
+                                <input type="radio" id="other" name="work_status" value="4">
+                                <label for="other">其他</label>
+                            </div>
+                            <!--                      -->
+
+                        </div>
+                    </form>
+                </div>
+            </li>
+            <li class="layui-timeline-item">
+                <div class="layui-timeline-content layui-text">
+<!--                    <h3 class="layui-timeline-title">沟通工作地点</h3>-->
+                    <p id="workplace">
+                    </p>
+                </div>
+            </li>
+
+            <li class="layui-timeline-item">
+                <div class="layui-timeline-content layui-text">
+                    <h5 class="layui-timeline-title">现居住地:</h5>
+                    <div id="distpicker1">
+
+                        <h5 class="layui-col-sm2">
+                            <select style="width: 63.98px" class="layui-select" name="current_settle_province"
+                                    id="userBasicEditCurSettleProvince"></select>
+                            <!--          <input type="text" id="userBasicEditCurSettleProvince" name="current_settle_province" placeholder="省" autocomplete="off" class="layui-input layui-from-checked">-->
+                        </h5>
+                        <h5 class="layui-col-sm2">
+                            <select style="width: 63.98px" class="layui-select" name="current_settle_city"
+                                    id="userBasicEditCurSettleCity"></select>
+                            <!--          <input type="text" id="userBasicEditCurSettleCity" name="current_settle_city" placeholder="市" autocomplete="off" class="layui-input layui-from-checked">-->
+                        </h5>
+                        <h5 class="layui-col-sm2">
+                            <select style="width: 63.98px" class="layui-select" name="current_settle_district"
+                                    id="userBasicEditCurSettleDistrict"></select>
+                            <!--          <input type="text" id="userBasicEditCurSettleDistrict" name="current_settle_district" placeholder="区" autocomplete="off" class="layui-input layui-from-checked">-->
+                        </h5>
+
+                </div>
+                    <h5 class="layui-col-sm3">
+                        <select style="width: 63.98px" class="layui-select" name="current_settle_street"
+                                id="userBasicEditCurSettleStreet"></select>
+                                              
+                    </h5>
+                    <h5 class="layui-col-sm10">
+                        
+                                               <input type="text" id="userBasicEditCurSettleXx" name="current_settle_xx"
+                                                       placeholder="详细地址" autocomplete="off" class="layui-input layui-from-checked">
+                    </h5>
+                    <div class="layui-col-sm2">
+                        <button class="layui-btn layui-btn-xs" id="userBasicSaveButton" style="display:inline;">保存
+                        </button>
+                    </div>
+
+                </div>
+            </li>
+            <br/>
+            <li  style="display: none" id="base_map" class="layui-timeline-item">
+                <div class="layui-timeline-content layui-text">
+                    <h5 class="layui-timeline-title">距离计算:</h5>
+                    <p id="frame_address_text" style="color: #f7c837">正在计算..</p>
+                    <div id="frame_address" style="display:none;width: 200px;height: auto;background-color: white">
+                        地址初始值:
+                    </div>
+                    <div id="l-map" style="display: none"></div>
+                    <div id="r-result" style="background-color: yellowgreen;display: none">1111111111</div>
+
+                </div>
+            </li>
+            <br/>
+
+            <li class="layui-timeline-item">
+                <div class="layui-timeline-content layui-text">
+<!--                    <h3 class="layui-timeline-title">沟通工作意愿</h3>-->
+                    <p id="work_purpose">
+                    </p>
+                </div>
+            </li>
+            <li class="layui-timeline-item" style="display: none" >
+                <div class="layui-timeline-content layui-text">
+<!--                    <form>-->
+                        <div class="form-group">
+                            <label class="col-form-label">期望行业</label>
+                            <!--                            <select class="form-control" id="userExpectArea">-->
+                            <!--                                <option value=-1></option>-->
+                            <!--                                <option value=1>计算机软件</option>-->
+                            <!--                                <option value=2>通信</option>-->
+                            <!--                                <option value=3>建筑</option>-->
+                            <!--                                <option value=4>房地产</option>-->
+                            <!--                                <option value=5>家居装修</option>-->
+                            <!--                                <option value=6>其他</option>-->
+                            <!--                            </select>-->
+                            <input type="text" autocomplete="off" class="form-control select-hangye"
+                                   name="userExpectArea"
+                                   id="userExpectArea"
+                                   placeholder=""
+                                   value=""/>
+
+                            <label class="col-form-label">期望岗位</label>
+                            <!--                            <select class="form-control" id="userExpectPost">-->
+                            <!--                                <option value=-1></option>-->
+                            <!--                                <option value=1>普通员工</option>-->
+                            <!--                                <option value=2>项目经理</option>-->
+                            <!--                                <option value=3>总监</option>-->
+                            <!--                            </select>-->
+
+                            <input type="text" autocomplete="off" class="form-control select-gangwei"
+                                   name="userExpectPost"
+                                   id="userExpectPost"
+                                   placeholder=""
+                                   value=""/>
+                             <button class="layui-btn  layui-btn-xs" onclick="saveHG()" >保存</button>
+
+
+                        </div>
+
+<!--                    </form>-->
+                </div>
+            </li>
+            <!--            <li class="layui-timeline-item">-->
+            <!--                <div class="layui-timeline-content layui-text">-->
+            <!--                    <form>-->
+            <!--                        <div class="form-group">-->
+            <!--                            <label class="col-form-label">期望岗位</label>-->
+            <!--                            <select class="form-control" id="userExpectPost">-->
+            <!--                                <option value=-1></option>-->
+            <!--                                <option value=1>普通员工</option>-->
+            <!--                                <option value=2>项目经理</option>-->
+            <!--                                <option value=3>总监</option>-->
+            <!--                            </select>-->
+            <!--                        </div>-->
+            <!--                    </form>-->
+            <!--                </div>-->
+            <!--            </li>-->
+
+            <li class="layui-timeline-item" style="display: none" >
+                <div class="layui-timeline-content layui-text">
+                    <form>
+                        <div class="form-group">
+                            <label class="col-form-label">期望作息时间</label>
+                            <!--                            <select class="form-control" id="userExpectRestModel">-->
+                            <!--                                <option value=-1></option>-->
+                            <!--                                <option value=1>做五休二</option>-->
+                            <!--                                <option value=2>单双休</option>-->
+                            <!--                                <option value=3>单休</option>-->
+                            <!--                                <option value=4>无休</option>-->
+                            <!--                            </select>-->
+                            <select class="form-control" id="userExpectRestModel" name=userExpectRestModel"
+                                    aria-labelledby="basic-addon2">
+                            </select>
+
+                            <label class="col-form-label">社保公积金</label>
+                            <!--                            <select class="form-control" id="userExpectInsurancePlace">-->
+                            <!--                                <option value=-1></option>-->
+                            <!--                                <option value=1>本地最低</option>-->
+                            <!--                                <option value=2>本地实缴</option>-->
+                            <!--                                <option value=3>外地最低</option>-->
+                            <!--                                <option value=4>外地实缴</option>-->
+                            <!--                                <option value=5>不购买</option>-->
+                            <!--                            </select>-->
+                            <select class="form-control" id="userExpectInsurancePlace" name="userExpectInsurancePlace"
+                                    aria-labelledby="basic-addon2">
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </li>
+
+            <!--            <li class="layui-timeline-item">-->
+            <!--                <div class="layui-timeline-content layui-text">-->
+            <!--                    <form>-->
+            <!--                        <div class="form-group">-->
+            <!--                            <label class="col-form-label">期望社保购买地</label>-->
+            <!--                            <select class="form-control" id="userExpectInsurancePlace">-->
+            <!--                                <option value=-1></option>-->
+            <!--                                <option value=1>本地最低</option>-->
+            <!--                                <option value=2>本地实缴</option>-->
+            <!--                                <option value=3>外地最低</option>-->
+            <!--                                <option value=4>外地实缴</option>-->
+            <!--                                <option value=5>不购买</option>-->
+            <!--                            </select>-->
+            <!--                        </div>-->
+            <!--                    </form>-->
+            <!--                </div>-->
+            <!--            </li>-->
+
+
+            <!--            <li class="layui-timeline-item">-->
+            <!--                <div class="layui-timeline-content layui-text">-->
+            <!--                    <form>-->
+            <!--                        <div class="form-group">-->
+            <!--                            <label class="col-form-label">期望社保购买时间</label>-->
+            <!--                            <select class="form-control" id="userExpectInsuranceTime">-->
+            <!--                                <option value=-1></option>-->
+            <!--                                <option value=1>转正购买</option>-->
+            <!--                                <option value=2>入职购买</option>-->
+            <!--                                <option value=3>不购买</option>-->
+            <!--                            </select>-->
+            <!--                        </div>-->
+            <!--                    </form>-->
+            <!--                </div>-->
+            <!--            </li>-->
+
+
+            <li class="layui-timeline-item" style="display: none" >
+                <div class="layui-timeline-content layui-text">
+                    <div class="layui-form-item">
+                        <h6>期望薪水(元/月)</h6>
+                        <h5 class="layui-col-sm12">
+                            <input type="text" id="userExpectSalary" name="gender" placeholder="单位/元" autocomplete="off"
+                                   class="layui-input layui-from-checked">
+                        </h5>
+                    </div>
+                </div>
+            </li>
+
+
+            <li class="layui-timeline-item">
+                <div class="layui-timeline-content layui-text">
+<!--                    <h3 class="layui-timeline-title">微信邀请</h3>-->
+                    <p id="wechat_invite">
+                    </p>
+                </div>
+            </li>
+
+
+           
+
+        </ul>
+    </div>
+</div>
+<script>
+
+
+
+    var resume_id = localStorage.getItem("resume_id");
+    GetBasicInfo(resume_id)
+
+
+    function getStreets(id, keyword, fn) {
+
+        console.log('req..')
+        $.ajax({
+            type: "GET",
+            url: 'http://district.market.alicloudapi.com/v3/config/district',
+            // dataType: "jsonp",
+            // jsonp: "callback",
+            headers: {'Authorization': "APPCODE " + 'ba0b5b1ecfd24a6eaa8c1234de7978b3'},
+            data: {
+                // "callback": "callback",
+                "extensions": "base",
+                 "filter": keyword == '宝山区' ? "310113":"",
+                "offset": "20",
+                "output": "JSON",
+                "page": "1",
+                "showbiz": "true",
+                "subdistrict": "3",
+                "keywords": keyword
+            },
+            success: function (data) {
+                var strs = [];
+                if (data.status != "1") {
+                    alert('高德地图请求失败,请检查网络');
+                    return false;
+                }
+                if (data.districts.length == 0) return strs;
+                var strs = [];
+                for (var s in data.districts[0].districts) {
+                    strs.push(data.districts[0].districts[s].name);
+                }
+                console.log(strs);
+                $('#' + id).empty();
+                for (var str of strs) {
+                    var h = `<option value="${str}">${str}</option>`;
+                    $('#' + id).append(h);
+                }
+                if (fn)
+                    fn()
+            }
+            ,
+            error: function (err) {
+                console.log('err', err)
+            }
+        })
+    }
+
+
+    $(function () {
+        $('#userBasicEditCurSettleDistrict').change(function () {
+            var st = $(this).val();
+            console.log(st)
+            if (st != '') {
+                getStreets('userBasicEditCurSettleStreet', st)
+            }
+        })
+
+
+
+    })
+
+
+    // $(document).on('change', '#userBasicEditCurSettleProvince', function () {
+    //     // var val = $('#userExpectArea').find("option:selected").text()
+    //     UpdateBasicInfo(resume_id)
+    // });
+    //
+    // $(document).on('change', '#userBasicEditCurSettleCity', function () {
+    //     // var val = $('#userExpectArea').find("option:selected").text()
+    //     UpdateBasicInfo(resume_id)
+    // });
+    //
+    // $(document).on('change', '#userBasicEditCurSettleDistrict', function () {
+    //     // var val = $('#userExpectArea').find("option:selected").text()
+    //     UpdateBasicInfo(resume_id)
+    // });
+    //
+    // $(document).on('change', '#userBasicEditCurSettleStreet', function () {
+    //     // var val = $('#userExpectArea').find("option:selected").text()
+    //     UpdateBasicInfo(resume_id)
+    // });
+
+    // $('#distpicker1').distpicker({
+    //     province: response.current_settle_province || '',
+    //     city: response.current_settle_city || '',
+    //     district: response.current_settle_district || ''
+    // });
+</script>

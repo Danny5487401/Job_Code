@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+{% load static %}
+<html class="x-admin-sm">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <title></title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+  <link rel="stylesheet" href="{% static 'recruit_manager/css/layui_font.css' %}">
+  <link rel="stylesheet" href="{% static 'recruit_manager/css/layui.css' %}">
+  <link rel="stylesheet" href="{% static 'recruit_manager/css/xadmin.css' %}">
+  <link rel="stylesheet" href="{% static 'recruit_manager/css/theme2578.min.css' %}">
+  <script type="text/javascript"
+              src="http://api.map.baidu.com/api?v=2.0&ak=OrXmNGu0t8DYTM7aCFGSq28XSECqWu6i"></script>
+  <!-- Bootstrap core JavaScript-->
+  <script src="{% static 'recruit_manager/vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'recruit_manager/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  
+  <!-- Core plugin JavaScript-->
+  <script src="{% static 'recruit_manager/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+  
+  
+  <style>
+      .color-dropdown-wrapper li {
+          list-style: none;
+      }
+  
+      .color-dropdown-wrapper .color-list {
+          overflow: hidden;
+          padding-left: 0;
+      }
+  
+      .color-dropdown-wrapper li a {
+          display: block;
+          color: #333;
+          width: 116px;
+          padding: 0 10px;
+          line-height: 30px;
+          font-size: 12px;
+          text-decoration: none;
+      }
+  
+      /*不显示框框了*/
+      .color-dropdown-wrapper li .color-block {
+          /*border: 1px solid #ddd;*/
+          /*width: 11px;*/
+          /*height: 11px;*/
+          /*display: inline-block;*/
+          /*margin-right: 5px;*/
+      }
+  
+      .color-dropdown-wrapper .colors-panel-title, .color-dropdown-wrapper .colors-suggest-title {
+          margin: 0;
+          font-size: 12px;
+          line-height: 24px;
+      }
+  
+      .color-dropdown-wrapper .colors-panel .color-tag {
+          float: left;
+      }
+  
+      .color-dropdown-wrapper .colors-panel {
+          padding: 10px 20px;
+          overflow: hidden;
+          position: relative;
+      }
+  
+      .color-dropdown-wrapper .color-group-panel {
+          float: left;
+          background: #fff;
+          overflow: hidden;
+          padding-left: 10px;
+          padding-right: 10px;
+      }
+  
+      .color-dropdown-wrapper li a {
+          display: block;
+          color: #333;
+          width: 116px;
+          padding: 0 10px;
+          line-height: 30px;
+          font-size: 12px;
+          text-decoration: none;
+      }
+  
+      .color-dropdown-wrapper {
+          background: #fff;
+          border: 1px solid #e5e5e5;
+          color: #333;
+          font-size: 12px;
+          overflow: hidden;
+      }
+  
+      .color-dropdown-wrapper.color-group-wrapper {
+          width: 700px;
+      }
+  
+      .color-dropdown-wrapper li:hover {
+          background: #EEEEEE;
+      }
+  
+      .colors-panel::before {
+          content: "";
+          width: 1px;
+          background-color: #e5e5e5;
+          position: absolute;
+          top: 15px;
+          bottom: 15px;
+          display: block;
+          left: 0;
+      }
+  
+  </style>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
+  
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+  
+  <!-- (Optional) Latest compiled and minified JavaScript translation files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/i18n/defaults-*.min.js"></script>
+  
+  
+  
+  
+  <script src="https://cdn.bootcss.com/distpicker/1.0.4/distpicker.data.js"></script>
+  <script src="https://qnode.oss-cn-beijing.aliyuncs.com/cityspick.js"></script>
+  
+  <!-- Custom scripts for all pages-->
+  <script src="{% static 'recruit_manager/js/sb-admin-2.min.js' %}"></script>
+  <script src="{% static 'recruit_manager/js/layui/layui.js' %}"></script>
+  <script src="{% static 'recruit_manager/js/xadmin.js' %}"></script>
+
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15" id="resumeInfo" resumeId={{resumeId}} projectId={{projectId}}
+             interviewId={{interviewId}}>
+            <div class="layui-col-md12" style="height:600px;overflow-y:auto" >
+
+<div class="layui-card">
+    <div class="layui-card-header" id="userBasicHeader">
+      <div class="layui-col-sm10">基本信息</div>
+      <div class="layui-col-sm2">
+          <!--      <button class="layui-btn layui-btn-xs" id="userBasicEditButton" hidden>编辑</button>-->
+      </div>
+      <div class="layui-col-sm2">
+          <button class="layui-btn layui-btn-xs" id="userBasicAddButton" style="display:inline;">新增</button>
+      </div>
+    </div>
+  
+      <div class="layui-card-body layui-row layui-col-space10" id="userBasicShowPanel" hidden>
+      <div class="layui-col-sm9">
+        <div class="layui-form-item" id="userBasicShowName">
+          <h4> {{ resume.username }} </h4>
+        </div>
+        <div class="layui-form-item">
+            <h5 class="layui-col-sm1" id="userBasicShowGendor">
+              {% if resume.gendor == 'm' %}
+                男
+              {% elif resume.gendor == 'f' %}
+                女
+              {% else %}
+                未知
+              {% endif %}
+            </h5>
+          <h5 class="layui-col-sm1" id="userBasicShowAge">{{resume.age}}</h5>
+          <h5 class="layui-col-sm2" id="userBasicShowDegree"></h5>
+          <h5 class="layui-col-sm3" id="userBasicShowGraduate">{{resume.graduate}}</h5>
+          <h6 class="layui-col-sm4" id="userBasicShowPhone">电话:</h6>
+        </div>
+        <div class="layui-form-item">
+          <h6 class="layui-col-sm12" id="userBasicShowCurResidence">现居住地：</h6>
+          <h6 class="layui-col-sm12" id="userBasicShowBirthPlace">籍贯:</h6>
+  <!--        <h6 class="layui-col-sm12" id="userBasicShowExpectPlace">期望工作地:</h6>-->
+        </div>
+      </div>
+    </div>
+  
+      <div class="layui-card-body layui-row layui-col-space10" id="userBasicEditPanel">
+      <div class="layui-col-sm9">
+        <div class="layui-form-item">
+          <input type="text" id="userBasicEditName" name="username" placeholder="姓名" autocomplete="off" class="layui-input">
+          <h5 class="layui-col-sm2">
+              <!--          <input type="text" id="userBasicEditGendor" name="gender" placeholder="性别" autocomplete="off" class="layui-input layui-from-checked">-->
+              <select class="layui-select" id="userBasicEditGendor">
+                  <option value="男">男</option>
+                  <option value="女">女</option>
+              </select>
+          </h5>
+          <h5 class="layui-col-sm3">
+              <!--          <input type="text" id="userBasicEditAge" name="age" placeholder="年龄" autocomplete="off" class="layui-input">-->
+              <select class="layui-select" id="userBasicEditAge" name="age">
+  
+              </select>
+          </h5>
+          <h5 class="layui-col-sm3">
+              <!--          <input type="text" id="userBasicEditDegree" name="degree" placeholder="学历" autocomplete="off" class="layui-input">-->
+              <select class="layui-select" id="userBasicEditDegree" name="degree">
+                  <option value=""></option>
+                  <option value="小学">小学</option>
+                  <option value="初中">初中</option>
+                  <option value="高中">高中</option>
+                  <option value="中专">中专</option>
+                  <option value="大专">大专</option>
+                  <option value="本科">本科</option>
+                  <option value="硕士">硕士</option>
+                  <option value="博士">博士</option>
+                  <option value="博士后">博士后</option>
+              </select>
+          </h5>
+          <h5 class="layui-col-sm3">
+            <!--          <input class="layui-input" autocomplete="off" placeholder="毕业时间" id="userBasicEditGraduate">-->
+            <select class="layui-select" id="userBasicEditGraduate">
+            </select>
+          </h5>
+  
+          <h6 class="layui-col-sm12">电话号码：
+              <input type="text" id="userBasicEditPhone" class="layui-input" name="phone_number">
+          </h6>
+  
+          <!-- 换成三个联动框体 -->
+          <h6 class="layui-col-sm12">籍贯:
+          </h6>
+          <div id="distpicker">
+            <h5 class="layui-col-sm3">
+              <select style="width: 63.98px" class="layui-select" name="birth_province"
+                      id="userBasicEditBirthProvince"></select>
+              <!--          <input type="text" id="userBasicEditBirthProvince" name="birth_province" placeholder="省" autocomplete="off" class="layui-input layui-from-checked">-->
+            </h5>
+            <h5 class="layui-col-sm3">
+              <select style="width: 63.98px" class="layui-select" name="birth_city" id="userBasicEditBirthCity"></select>
+              <!--          <input type="text" id="userBasicEditBirthCity" name="birth_city" placeholder="市" autocomplete="off" class="layui-input layui-from-checked">-->
+            </h5>
+            <h5 class="layui-col-sm3">
+              <select style="width: 63.98px" class="layui-select" name="birth_district"
+                      id="userBasicEditBirthDistrict"></select>
+  
+              <!--          <input type="text" id="userBasicEditBirthDistrict" name="birth_district" placeholder="区" autocomplete="off" class="layui-input layui-from-checked">-->
+            </h5>
+          </div>
+  
+          <h5 class="layui-col-sm3">
+            <input type="text" id="userBasicEditBirthStreet" name="birth_street" placeholder="街道" autocomplete="off" class="layui-input layui-from-checked">
+          </h5>
+  
+        <h6 class="layui-col-sm12">居住状况：
+            <input type="text" id="userBasicEditLiveState" class="layui-input" name="live_state">
+        </h6>
+        </div>
+      </div>
+    </div>
+  
+</div>
+</div>
+</div>
+
+
+  </div>
+  
+  <script>
+   // var $distpicker = $('#distpicker');
+   // var $distpicker1 = $('#distpicker1');
+   // var $distpicker2 = $('#distpicker2');
+  
+  
+  </script>
+  <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+  <script src="{% static 'recruit_manager/js/callInterview/basic_op.js' %}"></script>
+  <script type="text/javascript">
+  
+  
+  
+  
+  function submitResume() {        
+    var data = {}
+    if ($('#userBasicEditName').val().length != 0) {
+        data['username'] =  $('#userBasicEditName').val()
+    } else {
+        console.log("username ", $('#userBasicEditName').val())
+    }
+
+    if ($('#userBasicEditAge').val().length != 0) {
+        data['age'] = parseInt($('#userBasicEditAge').val())
+    }
+
+    if ($('#userBasicEditGendor').val() == '男') {
+        data['gender'] = 'm'
+    } else if ($('#userBasicEditGendor').val() == '女') {
+        data['gender'] = 'f'
+    }
+
+    if ($('#userBasicEditDegree').val() == '小学') {
+        data['degree'] = 1
+    } else if ($('#userBasicEditDegree').val() == '初中') {
+        data['degree'] = 2
+    } else if ($('#userBasicEditDegree').val() == '高中') {
+        data['degree'] = 3 
+    } else if ($('#userBasicEditDegree').val() == '中专') {
+        data['degree'] = 4
+    } else if ($('#userBasicEditDegree').val() == '大专') {
+        data['degree'] = 5 
+    } else if ($('#userBasicEditDegree').val() == '本科') {
+        data['degree'] = 6
+    } else if ($('#userBasicEditDegree').val() == '硕士') {
+        data['degree'] = 7
+    } else if ($('#userBasicEditDegree').val() == '博士') {
+        data['degree'] = 8
+    } else if ($('#userBasicEditDegree').val() == '博士后') {
+        data['degree'] = 9 
+    }
+    if ($('#userBasicEditBirthProvince').val() != '') {
+        data['birth_province'] = $('#userBasicEditBirthProvince').val()
+    }
+    if ($('#userBasicEditBirthCity').val() != '') {
+        data['birth_city'] = $('#userBasicEditBirthCity').val()
+    }
+    if ($('#userBasicEditBirthDistrict').val() != '') {
+        data['birth_district'] = $('#userBasicEditBirthDistrict').val()
+    }
+    if ($('#userBasicEditBirthStreet').val() != '') {
+        data['birth_street'] = $('#userBasicEditBirthStreet').val()
+    }
+
+    if ($('#userBasicEditCurSettleProvince').val() != '') {
+        data['current_settle_province'] = $('#userBasicEditCurSettleProvince').val()
+    }
+    if ($('#userBasicEditCurSettleCity').val() != '') {
+        data['current_settle_city'] = $('#userBasicEditCurSettleCity').val()
+    }
+    if ($('#userBasicEditCurSettleDistrict').val() != '') {
+        data['current_settle_district'] = $('#userBasicEditCurSettleDistrict').val()
+    }
+    if ($('#userBasicEditCurSettleStreet').val() != '') {
+        data['current_settle_street'] = $('#userBasicEditCurSettleStreet').val()
+    }
+    if ($('#userBasicEditCurSettleXx').val() != '') {
+        data['current_settle_xx'] = $('#userBasicEditCurSettleXx').val()
+    }
+
+
+    if ($('#userBasicEditExpectProvince').val() != '') {
+        data['expected_province'] = $('#userBasicEditExpectProvince').val()
+    }
+    if ($('#userBasicEditExpectCity').val() != '') {
+        data['expected_city'] = $('#userBasicEditExpectCity').val()
+    }
+    if ($('#userBasicEditExpectDistrict').val() != '') {
+        data['expected_district'] = $('#userBasicEditExpectDistrict').val()
+    }
+    if ($('#userBasicEditExpectStreet').val() != '') {
+        data['expected_street'] = $('#userBasicEditExpectStreet').val()
+    }
+    if ($('#userBasicEditGraduate').val() != '') {
+        data['graduate_year'] = $('#userBasicEditGraduate').val()
+    }
+
+    if ($('#userBasicEditPhone').val() != '') {
+        data['phone_number'] = Number($('#userBasicEditPhone').val())
+    }
+
+    if ($('#userBasicEditLiveState').val() != '') {
+      //  data['live_state'] = Number($('#userBasicEditLiveState').val())
+      data['live_state'] = $('#userBasicEditLiveState').val()
+    }
+                     xhr_common_send("POST","/api/addresume/", data);
+                   }
+  
+  
+                   function GetBasicInfo(rid) {
+  
+  rid = rid || resumeId
+  xhr_common_send('GET', '/api/resumes/' + rid + '/', null, function (response) {
+    console.log(response)
+    gender = '男'
+    if (response.gender == 'f') {
+        gender = '女'
+    }
+
+    degree = ''
+
+    if (response.degree == 1) {
+        degree = '小学'
+    } else if (response.degree == 2) {
+        degree = '初中'
+    } else if (response.degree == 3) {
+        degree = '高中'
+    } else if (response.degree == 4) {
+        degree = '中专'
+    } else if (response.degree == 5) {
+        degree = '大专'
+    } else if (response.degree == 6) {
+        degree = '本科'
+    } else if (response.degree == 7) {
+        degree = '硕士'
+    } else if (response.degree == 8) {
+        degree = '博士'
+    } else if (response.degree == 9) {
+        degree = '博士后'
+    }
+
+    console.log("To Update Panel", degree, gender)
+    // Update the show panel info
+    $('#userBasicShowName').html(response.username)
+    $('#userBasicShowGendor').html(gender)
+    $('#userBasicShowAge').html(response.age)
+    $('#userBasicShowDegree').html(degree)
+    $('#userBasicShowGraduate').html()
+      var cursite = response.cursettle || '';
+            console.log('现居住地',cursite)
+    $('#userBasicShowCurResidence').html("现居住地 : " + cursite)
+    $('#userBasicShowBirthPlace').html("籍贯 : " + response.birthorigin)
+
+    $('#userBasicShowPhone').html("" + response.phone_number)
+
+    // Update the edit panel info
+    $('#userBasicEditName').val(response.username)
+    $('#userBasicEditGendor').val(gender)
+
+      //append age sel
+            $('#userBasicEditAge').empty();
+      $('#userBasicEditAge').append('<option value=""></option>')
+      for (var year = 100; year >= 1; year--) {
+          var opt = `<option value="${year}">${year}</option>`
+          $('#userBasicEditAge').append(opt)
+      }
+
+    $('#userBasicEditAge').val(response.age)
+    $('#userBasicEditDegree').val(degree)
+
+
+      //render
+      $('#userBasicEditGraduate').empty();
+      $('#userBasicEditGraduate').append('<option value=""></option>')
+
+      for (var year = 2020; year >= 1970; year--) {
+          var opt = `<option value="${year}">${year}</option>`
+          $('#userBasicEditGraduate').append(opt)
+      }
+
+
+      $('#userBasicEditGraduate').val(response.graduate_year)
+    $('#userBasicEditPhone').val(response.phone_number)
+    $('#userBasicEditLiveState').val(response.live_state)
+
+
+      //使用组件赋值
+      $('#distpicker').distpicker({
+          province: response.birth_province,
+          city: response.birth_city,
+          district: response.birth_district
+      });
+      // $('#userBasicEditBirthProvince').val(response.birth_province)
+      // $('#userBasicEditBirthCity').val(response.birth_city)
+      // $('#userBasicEditBirthDistrict').val(response.birth_district)
+    $('#userBasicEditBirthStreet').val(response.birth_street)
+
+
+      console.log('distpicker1', $('#distpicker1'))
+          $('#distpicker1').distpicker("destroy")
+
+      $('#distpicker1').distpicker({
+          province: response.current_settle_province || '',
+          city: response.current_settle_city || '',
+          district: response.current_settle_district || ''
+      });
+
+     var joinStr = response.current_settle_province + response.current_settle_city + response.current_settle_district + response.current_settle_street;
+      if (response.current_settle_province == '') {
+          joinStr = '无'
+      }
+      console.log('赋值现居住地',response.current_settle_province + response.current_settle_city + response.current_settle_district + response.current_settle_street)
+      $('#userBasicShowExpectPlace').html("期望工作地 : " + joinStr)
+
+      // $('#userBasicEditCurSettleProvince').val(response.current_settle_province)
+      // $('#userBasicEditCurSettleCity').val(response.current_settle_city)
+      // $('#userBasicEditCurSettleDistrict').val(response.current_settle_district)
+
+
+      if (response.current_settle_district) {
+          getStreets('userBasicEditCurSettleStreet', response.current_settle_district, function () {
+              // $('#street_id').val(res.address_street)
+              $('#userBasicEditCurSettleStreet').val(response.current_settle_street)
+          })
+      }
+
+      var project_info = JSON.parse(localStorage.getItem("project_info"))
+      console.log('project_info', project_info)
+      var project_addr =
+          project_info.address_city + project_info.address_district
+          + project_info.address_street + project_info.address_suite
+
+      console.log('project_addr', project_addr)
+
+
+      //判断省市区街道信息是否齐全
+      // workexp_list
+      if (response.current_settle_province != "" && response.current_settle_city != "" && response.current_settle_district != "" && response.current_settle_street != "") {
+          //frame_address
+          var targetAddr = response.current_settle_city + response.current_settle_district + response.current_settle_street + response.current_settle_xx
+          // setTimeout(function () {
+          if (response.current_settle_city == project_info.address_city) {
+
+
+              copyText(project_addr, targetAddr, 'frame_address', 'l-map')
+
+              function renderText() {
+                  console.log('开始')
+                  var text = $('div#frame_address div.trans-title').find('p').eq(1).text()
+                  if (text) {
+                      $('#frame_address_text').text(text)
+                  }
+              }
+
+              // localTimer.clearInterval();
+
+              setTimeout(renderText, 3000)
+
+              function randomString(len) {
+                  len = len || 32;
+                  var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+                  /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+                  var maxPos = $chars.length;
+                  var pwd = '';
+                  for (var i = 0; i < len; i++) {
+                      pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+                  }
+                  return pwd;
+              }
+
+              //获得项目的额外地址
+              var extra_address = project_info.extra_address
+              console.log('extra_address', extra_address)
+              if (extra_address && extra_address != '') {
+                  extra_address = JSON.parse(extra_address)
+                  var idx = 1
+                  for (var extra of extra_address) {
+                      console.log('extra ,', extra)
+                      if (extra.district_id != '' && extra.street_id != '' && extra.address_suite != '') {
+                          console.log('render before')
+                          var addr = project_info.address_city + extra.district_id + extra.street_id + extra.address_suite
+                          console.log('addr', addr)
+                          //
+                          var eleVal = $('#' + addr).val()
+                          if (typeof eleVal !== 'undefined') {
+                              // continue
+                          }
+
+                          //从basemap追加
+                          var randomStr = randomString(6)
+                          var inner = `<div class="layui-timeline-content layui-text">
+                  <h5 class="layui-timeline-title">【${extra.addr_tag || ''}】${addr}【${extra.zp_status}】:距离计算:</h5>
+                  <p id="frame_address_text${randomStr}" style="color: #f7c837">正在计算..</p>
+                  <div id="frame_address${randomStr}" style="display:none;width: 200px;height: auto;background-color: white">
+                      地址初始值:
+                  </div>
+                  <div id="l-map${randomStr}" style="display: none"></div>
+                  <div id="r-result${randomStr}" style="background-color: yellowgreen;display: none">1111111111</div>
+
+              </div>`
+                          var html = `
+                          <li id="${addr}" class="layui-timeline-item">
+                          ${inner}
+                          </li>
+                          `;
+
+                          if (typeof eleVal !== 'undefined') {
+                              $('#' + addr).html(inner)
+                          } else {
+                              $('#base_map').after(html)
+                          }
+
+
+                          console.log('append ed')
+
+
+                          var fn = function (addr, targetAddr, randomStr, idx) {
+                              setTimeout(function () {
+                                  copyText(addr, targetAddr, 'frame_address' + randomStr, 'l-map' + randomStr)
+
+                              }, idx * 1000)
+                          }
+
+                          fn(addr, targetAddr, randomStr, idx)
+
+
+                          // localTimer.clearInterval();
+
+                          var fnn = function (randomStr, idx) {
+
+                              setTimeout(function () {
+                                  var text = $('div#frame_address' + randomStr + ' div.trans-title').find('p').eq(1).text()
+                                  console.log('timeout text:', text)
+                                  if (text) {
+                                      $('#frame_address_text' + randomStr).text(text)
+                                  }
+                              }, 3000 + idx * 1000)
+                          }
+
+                          fnn(randomStr, idx)
+
+
+                      }
+                      idx++
+                  }
+
+              }
+
+
+
+          } else {
+              $('#frame_address_text').text('距离过远，无法计算')
+              // if (response.workexp_list.length > 0 && response.workexp_list[0] != '') {
+              //     nextLogic(project_addr, response.workexp_list[0], project_info.address_city)
+              // }
+          }
+          // }, 1000)
+      } else {
+          //根据最近一份工作 查地址
+          // if (response.workexp_list.length > 0 && response.workexp_list[0] != '') {
+          //     nextLogic(project_addr, response.workexp_list[0], project_info.address_city)
+          // }
+      }
+
+
+
+      // $('#userBasicEditCurSettleStreet').val(response.current_settle_street)
+      //
+
+      console.log(312);
+                  $('#distpicker2').distpicker("destroy")
+      $('#distpicker2').distpicker({
+          province: response.expected_province,
+          city: response.expected_city,
+          district: response.expected_district
+      });
+
+      // $('#userBasicEditExpectProvince').val(response.expected_province)
+      // $('#userBasicEditExpectCity').val(response.expected_city)
+      // $('#userBasicEditExpectDistrict').val(response.expected_district)
+    $('#userBasicEditExpectStreet').val(response.expected_street)
+
+})
+}
+
+$('#userBasicEditAge').empty();
+      $('#userBasicEditAge').append('<option value=""></option>')
+      for (var year = 100; year >= 1; year--) {
+          var opt = `<option value="${year}">${year}</option>`
+          $('#userBasicEditAge').append(opt)
+      }
+                   $('#userBasicAddButton').click(function () {
+                         submitResume()
+                         console.log('新增')
+                     })
+  
+  //render
+  $('#userBasicEditGraduate').empty();
+      $('#userBasicEditGraduate').append('<option value=""></option>')
+
+      for (var year = 2020; year >= 1970; year--) {
+          var opt = `<option value="${year}">${year}</option>`
+          $('#userBasicEditGraduate').append(opt)
+      }
+      $('#distpicker').distpicker("destroy")
+      $('#distpicker').distpicker({
+          province: '',
+          city: '',
+          district: ''
+      });
+
+      var $distpicker = $('#distpicker');
+  
+  
+  </script>
+  </body>
+  </html>

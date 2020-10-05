@@ -1,0 +1,946 @@
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0057)http://127.0.0.1/index.php/Home/Jobs/jobs_show/id/652.htm -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ post.name }}</title>
+    <!--    <meta name="keywords" content="西安雁塔恒通村镇银行,银行大堂经理,全职,其他职位,陕西/西安/雁塔区">-->
+    <!--    <meta name="description" content="西安雁塔恒通村镇银行招聘岗位,银行大堂经理">-->
+    <!--    <meta name="author" content="桔子科技CMS">-->
+    <link rel="shortcut icon" href="http://127.0.0.1/favicon.ico">
+<script src="{% static 'recruit_manager/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'companies/htmlspecialchars.min.js' %}"></script>
+    <!--    <script type="text/javascript">-->
+    <!--        var app_spell = "1";-->
+    <!--        var qscms = {-->
+    <!--            base: "",-->
+    <!--            keyUrlencode: "0",-->
+    <!--            domain: "http://127.0.0.1",-->
+    <!--            root: "/index.php",-->
+    <!--            companyRepeat: "1",-->
+    <!--            is_subsite: 0,-->
+    <!--            subsite_level: "3",-->
+    <!--            smsTatus: "1",-->
+    <!--            captcha_open: "0",-->
+    <!--            varify_mobile: "0",-->
+    <!--            varify_suggest: "0",-->
+    <!--            varify_user_login: "0",-->
+    <!--            is_login: "0",-->
+    <!--            default_district: "27.342",-->
+    <!--            default_district_spell: "shanxi2.xian"-->
+    <!--        };-->
+    <!--        $(function () {-->
+    <!--            $.getJSON("/Home/AjaxCommon/get_header_min.htm", function (result) {-->
+    <!--                if (result.status == 1) {-->
+    <!--                    $('#J_header').html(result.data.html);-->
+    <!--                }-->
+    <!--            });-->
+    <!--        })-->
+    <!--    </script>-->
+    <link href="{% static 'companies/common.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'companies/common_ajax_dialog.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'companies/jobs.css' %}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="{% static 'companies/api.js' %}"></script>
+    <script type="text/javascript" src="{% static 'companies/getscript.js' %}"></script>
+    <!--	<script src="../default/public/js/jquery.common.js" type="text/javascript" language="javascript"></script> -->
+    <script src="{% static 'companies/share.js' %}"></script>
+    <link href="{% static 'companies/jobs.css' %}" rel="styleSheet" type="text/css">
+    <link rel="stylesheet" href="{% static 'recruit_manager/css/layui.css' %}">
+
+</head>
+<body>
+<!--<div class="header_min" id="header">-->
+<!--    <div class="header_min_top">-->
+<!--        <div id="J_header" class="itopl font_gray6 link_gray6">-->
+<!--            <span class="link_yellow">欢迎登录文创猎才网！请 <a id="J_site_login" href="javascript:;">登录</a> 或 <a id="J_site_reg"-->
+<!--                                                                                                       href="javascript:;">免费注册</a></span>-->
+<!--        </div>-->
+<!--        <div class="itopr font_gray9 link_gray6 substring"><a href="http://127.0.0.1/" class="home">网站首页</a>|<a-->
+<!--                href="http://127.0.0.1/m/index.htm" class="m">手机访问</a>|<a href="http://127.0.0.1/help/.htm"-->
+<!--                                                                          class="help">帮助中心</a>|<a-->
+<!--                href="http://127.0.0.1/shop/index.htm" class="shop">积分商城</a>|<a-->
+<!--                href="http://127.0.0.1/Home/Index/shortcut.htm" class="last">保存到桌面</a></div>-->
+<!--        <div class="clear"></div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="other_top_nav">-->
+<!--    <div class="ot_nav_box">-->
+<!--        <div class="ot_nav_logo"><a href="http://127.0.0.1/"><img src="{% static 'companies/logo_home.png' %}"-->
+<!--                                                                  border="0"></a></div>-->
+<!--        <div class="ot_nav_sub">-->
+<!--        </div>-->
+<!--        <div class="ot_nav_link ">-->
+<!--            <ul class="link_gray6 nowrap">-->
+<!--                <li class="on_li J_hoverbut "><a style="font-weight:100;" href="http://127.0.0.1/index.htm"-->
+<!--                                                 target="_self">首 页</a></li>-->
+<!--                <li class="on_li J_hoverbut "><a style="font-weight:100;"-->
+<!--                                                 href="http://www.wenchuanglcw.com/jobs/gao_list/wage/61.htm" target=""><font-->
+<!--                        color="#FF0000">商端猎才</font></a></li>-->
+<!--                <li class="on_li J_hoverbut "><a style="font-weight:100;"-->
+<!--                                                 href="http://127.0.0.1/jobfair/jobfair-list-.htm" target=""><font-->
+<!--                        color="#0066FF">招聘会</font></a></li>-->
+<!--                <li class="on_li J_hoverbut select"><a style="font-weight:100;"-->
+<!--                                                       href="http://127.0.0.1/jobs/jobs_list.htm" target=""><font-->
+<!--                        color="#666666">找工作</font></a></li>-->
+<!--                <li class="on_li J_hoverbut "><a style="font-weight:100;" href="http://127.0.0.1/resume/resume_list.htm"-->
+<!--                                                 target=""><font color="#666666">招人才</font></a></li>-->
+<!--                <li class="on_li J_hoverbut select"><a style="font-weight:100;"-->
+<!--                                                       href="http://127.0.0.1/company/company-list&#45;&#45;&#45;&#45;&#45;&#45;.htm" target=""><font-->
+<!--                        color="#666666">找企业</font></a></li>-->
+<!--                <li class="on_li J_hoverbut "><a style="font-weight:100;" href="http://127.0.0.1/shop/index.htm"-->
+<!--                                                 target=""><font color="#FF6600">文创商城</font></a></li>-->
+<!--                <li class="on_li J_hoverbut "><a style="font-weight:100;" href="http://127.0.0.1/jobs/hezuo.htm"-->
+<!--                                                 target=""><font color="#669900">战略合作</font></a></li>-->
+<!--                <li class="on_li J_hoverbut "><a style="font-weight:100;" href="http://127.0.0.1/news/index.htm"-->
+<!--                                                 target="_self">职场资讯</a></li>-->
+<!--            </ul>-->
+<!--            <div class="clear"></div>-->
+<!--        </div>-->
+<!--        <div class="clear"></div>-->
+<!--    </div>-->
+<!--</div>-->
+<script type="text/javascript" src="{% static 'companies/jquery.modal.dialog.js' %}"></script>
+<div class="new-se-group">
+    <div class="new-se-main">
+        <div class="jobstit">
+            <!--            <div class="time">-->
+            <!--                <div class="timebg">{{post.created}}</div>-->
+            <!--                <div id="J_jobs_click" class="timebg viewbg">102次</div>-->
+            <!--                <div class="clear"></div>-->
+            <!--            </div>-->
+            <div class="jobname">
+                <div class="j-n-txt">{{post.name}}</div>
+                <div class="clear"></div>
+            </div>
+            <div class="wage">{{post.salary_offer}}/月</div>
+            <div class="tit_com_name">{{post.company_id}}</div>
+            <!--            <div class="btns bdsharebuttonbox bdshare-button-style0-16" data-tag="share_1" data-bd-bind="1587718583962">-->
+            <!--                <div class="app apply_jobs">立即联系</div>-->
+            <!--                <div class="sbtn s1 favor"></div>-->
+            <!--                <a class="sbtn s2 bds_more" data-cmd="more"></a>-->
+            <!--                <div class="sbtn s3 report"></div>-->
+            <!--                <div class="clear"></div>-->
+            <!--            </div>-->
+        </div>
+    </div>
+</div>
+<div class="jobsshow">
+    <div class="l">
+        <div class="main">
+            <div class="item">
+                <div class="tit">基本信息</div>
+
+
+                <div class="itemli"><span>工作性质</span>全职</div>
+                <div class="itemli"><span>职位类别</span>{{post.description}}</div>
+                <!--                <div class="itemli"><span>招聘人数</span>若干人</div>-->
+                <div class="itemli"><span>学历要求</span>{{post.degree_min}}-{{post.degree_max}}</div>
+
+                <div class="clear"></div>
+                <!--                <div class="itemli"><span>工作经验</span>不限</div>-->
+                <!--                <div class="clear"></div>-->
+                <div class="itemli"><span>性别要求</span>{{post.gender}}</div>
+
+                <div class="itemli"><span>年龄要求</span>{{post.age_min}}岁-{{post.age_max}}岁</div>
+                <div class="itemli"><span>毕业区间</span>{{post.graduatetime_min}}年-{{post.graduatetime_max}}年</div>
+                <div class="clear"></div>
+                <div class="add"><span>工作地点</span>{{post.address_province}}{{post.address_city}}{{post.address_district}}{{post.address_suite}}
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="contact">
+                <div class="tit">联系方式</div>
+                <div class="txt">
+                    联系人：{{post.linkman}}
+                </div>
+                <div class="clear"></div>
+                <div class="txt">联系电话：{{post.linkman_phone}}</div>
+                <div class="clear"></div>
+                <!--                <div class="statistics">-->
+                <!--                    <div class="sttit">职位动态</div>-->
+                <!--                    <div class="stli">-->
+                <!--                        <div class="slitit">100%</div>-->
+                <!--                        <div class="slitxthelp">-->
+                <!--                            <div class="tip">-->
+                <!--                                <div class="arrows"></div>-->
+                <!--                                近两周该职位的简历处理率-->
+                <!--                            </div>-->
+                <!--                            简历处理率-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                    <div class="stli">-->
+                <!--                        <div class="slitit">0天</div>-->
+                <!--                        <div class="slitxt">简历平均处理时长</div>-->
+                <!--                    </div>-->
+                <!--                    <div class="stli last">-->
+                <!--                        <div class="slitit">2018-09-11</div>-->
+                <!--                        <div class="slitxt">企业最近登录时间</div>-->
+                <!--                    </div>-->
+                <!--                    <div class="clear"></div>-->
+                <!--                </div>-->
+            </div>
+            <div class="describe">
+                <div class="tit">职位描述</div>
+                <div class="txt">
+                    岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情岗位详情
+                </div>
+                <!--                <div class="qrcode">-->
+                <!--                    <div class="code"><img src="{% static 'companies/5b6beeb96faa4.jpg' %}"></div>-->
+                <!--                    <div class="codetxt">微信扫一扫，及时了解投递状态</div>-->
+                <!--                    <div class="resempty">你目前还没有登录：-->
+                <!--                        <div class="resadd J_resadd">立即登录</div>-->
+                <!--                    </div>-->
+                <!--                    <div class="clear"></div>-->
+                <!--                </div>-->
+                <div class="appjob">
+                    <!--                    <div class="appbtn apply_jobs">联系客服</div>-->
+                    <div onclick="ganxinqu()" class="appbtn apply_jobs">感兴趣</div>
+                    <div onclick="buganxinqu()" class="appbtn apply_jobs">不感兴趣</div>
+                    <br/>
+                    <br/>
+                    <br/>
+
+                    有时候，一次不犹豫的投递，恰恰成就了一次超完美的面试。
+                </div>
+                <!--                <div class="favorite bdsharebuttonbox bdshare-button-style0-16" data-tag="share_1"-->
+                <!--                     data-bd-bind="1587718583962">-->
+                <!--                    <div class="fli f1 favor">收藏</div>-->
+                <!--                    <a class="fli f2 bds_more" data-cmd="more">分享</a>-->
+                <!--                    <div class="fli f3 report">举报</div>-->
+                <!--                    <div class="clear"></div>-->
+                <!--                </div>-->
+            </div>
+        </div>
+        <!--        <div class="comjobs">-->
+        <!--            <div class="tit">-->
+        <!--                <div class="t">该公司的其他岗位</div>-->
+        <!--                <div class="more link_gray6">-->
+        <!--&lt;!&ndash;                    <a target="_blank" href="http://127.0.0.1/jobs/jobs_list/jobcategory/qita.htm">查看更多相似职位&gt;&gt;</a>&ndash;&gt;-->
+        <!--                </div>-->
+        <!--                <div class="clear"></div>-->
+        <!--            </div>-->
+        <!--            <div class="listbox">-->
+        <!--                <div class="list">-->
+        <!--                    <div class="jobname link_blue">-->
+        <!--                        <a target="_blank" href="http://127.0.0.1/jobs/jobs-show-661-.htm" title="车位销售">车位销售</a>-->
+        <!--                    </div>-->
+        <!--                    <div class="wage">3千-5千/月</div>-->
+        <!--                    <div class="txt">-->
+        <!--                        <div class="line_substring" title="陕西/西安/全西安">陕西/西安/全西安</div>-->
+        <!--                        <span>|</span>经验不限<span>|</span></div>-->
+        <!--                    <div class="txt link_gray6 substring"><a target="_blank"-->
+        <!--                                                             href="http://127.0.0.1/company/company-show-377-.htm"-->
+        <!--                                                             title="陕西文创人力资源管理有限公司">陕西文创人力资源管理有限公司</a></div>-->
+        <!--                </div>-->
+        <!--                <div class="list">-->
+        <!--                    <div class="jobname link_blue">-->
+        <!--                        <a target="_blank" href="http://127.0.0.1/jobs/jobs-show-662-.htm" title="医学客服岗">医学客服岗</a>-->
+        <!--                    </div>-->
+        <!--                    <div class="wage">5千-8千/月</div>-->
+        <!--                    <div class="txt">-->
+        <!--                        <div class="line_substring" title="陕西/西安/全西安">陕西/西安/全西安</div>-->
+        <!--                        <span>|</span>经验不限<span>|</span></div>-->
+        <!--                    <div class="txt link_gray6 substring"><a target="_blank"-->
+        <!--                                                             href="http://127.0.0.1/company/company-show-377-.htm"-->
+        <!--                                                             title="陕西文创人力资源管理有限公司">陕西文创人力资源管理有限公司</a></div>-->
+        <!--                </div>-->
+        <!--                <div class="list">-->
+        <!--                    <div class="jobname link_blue">-->
+        <!--                        <a target="_blank" href="http://127.0.0.1/jobs/jobs-show-663-.htm" title="生产员工">生产员工</a>-->
+        <!--                    </div>-->
+        <!--                    <div class="wage">8千-1万2/月</div>-->
+        <!--                    <div class="txt">-->
+        <!--                        <div class="line_substring" title="陕西/西安/全西安">陕西/西安/全西安</div>-->
+        <!--                        <span>|</span>经验不限<span>|</span></div>-->
+        <!--                    <div class="txt link_gray6 substring"><a target="_blank"-->
+        <!--                                                             href="http://127.0.0.1/company/company-show-377-.htm"-->
+        <!--                                                             title="陕西文创人力资源管理有限公司">陕西文创人力资源管理有限公司</a></div>-->
+        <!--                </div>-->
+        <!--                <div class="list">-->
+        <!--                    <div class="jobname link_blue">-->
+        <!--                        <a target="_blank" href="http://127.0.0.1/jobs/jobs-show-626-.htm" title="策划创意经理">策划创意经理</a>-->
+        <!--                    </div>-->
+        <!--                    <div class="wage">2万6-3万2/月</div>-->
+        <!--                    <div class="txt">-->
+        <!--                        <div class="line_substring" title="广东/广州/荔湾区">广东/广州/荔湾区</div>-->
+        <!--                        <span>|</span>5-10年<span>|</span></div>-->
+        <!--                    <div class="txt link_gray6 substring"><a target="_blank"-->
+        <!--                                                             href="http://127.0.0.1/company/company-show-511-.htm"-->
+        <!--                                                             title="某金融公司">某金融公司</a></div>-->
+        <!--                </div>-->
+        <!--                <div class="list">-->
+        <!--                    <div class="jobname link_blue">-->
+        <!--                        <a target="_blank" href="http://127.0.0.1/jobs/jobs-show-627-.htm" title="数据工程师">数据工程师</a>-->
+        <!--                    </div>-->
+        <!--                    <div class="wage">2万-4万/月</div>-->
+        <!--                    <div class="txt">-->
+        <!--                        <div class="line_substring" title="江苏/南京/雨花台区">江苏/南京/雨花台区</div>-->
+        <!--                        <span>|</span>3-5年<span>|</span></div>-->
+        <!--                    <div class="txt link_gray6 substring"><a target="_blank"-->
+        <!--                                                             href="http://127.0.0.1/company/company-show-512-.htm"-->
+        <!--                                                             title="某IT公司">某IT公司</a></div>-->
+        <!--                </div>-->
+        <!--                <div class="list">-->
+        <!--                    <div class="jobname link_blue">-->
+        <!--                        <a target="_blank" href="http://127.0.0.1/jobs/jobs-show-628-.htm" title="前端开发工程师">前端开发工程师</a>-->
+        <!--                    </div>-->
+        <!--                    <div class="wage">1万8-2万4/月</div>-->
+        <!--                    <div class="txt">-->
+        <!--                        <div class="line_substring" title="江苏/南京/玄武区">江苏/南京/玄武区</div>-->
+        <!--                        <span>|</span>3-5年<span>|</span></div>-->
+        <!--                    <div class="txt link_gray6 substring"><a target="_blank"-->
+        <!--                                                             href="http://127.0.0.1/company/company-show-512-.htm"-->
+        <!--                                                             title="某IT公司">某IT公司</a></div>-->
+        <!--                </div>-->
+        <!--                <div class="clear"></div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+    </div>
+    <div class="r">
+        <div class="cominfo link_gray6">
+            <div class="comlogo">
+                <a href="javascript:void(0)">
+                    <img src="{% static 'companies/c399862d3b9d6b76c8436e924a68c45b.png' %}">
+                </a>
+            </div>
+            <div class="comname">
+                <a class="line_substring" href="javascript:void(0)"
+                   title="{{post.company_id}}">{{post.company_id}}</a>
+                <div class="clear"></div>
+            </div>
+            <div class="info"><span>性质</span>其它</div>
+            <div class="info"><span>行业</span>{{post.hangyeleibie}}</div>
+            <div class="info"><span>规模</span>20-99人</div>
+            <div class="info"><span>地区</span>{{post.address_province}}/{{post.address_city}}/{{post.address_district}}
+            </div>
+        </div>
+        <!--        <div class="comqrcode">-->
+        <!--            <div class="code"><img src=""></div>-->
+        <!--            <div class="codetxt">扫描二维码即可在手机端精彩呈现“微招聘”，一键分享到朋友圈为招聘助力！</div>-->
+        <!--            <div class="clear"></div>-->
+        <!--        </div>-->
+        <!--        <div class="leave_msg J_realyWrap">-->
+        <!--            <div class="tit">-->
+        <!--                <div class="t">给我留言</div>-->
+        <!--                <div class="clear"></div>-->
+        <!--            </div>-->
+        <!--            <div class="msg_textarea">-->
+        <!--                <textarea name="" id="" placeholder="请输入您的疑问。比如工作地、年薪、福利等等，我会及时给您回复！期待与您合作。"></textarea>-->
+        <!--            </div>-->
+        <!--            <div class="send_btn_group">-->
+        <!--                <div class="txt_num"></div>-->
+        <!--                <div class="send_btn J_realyBth" touid="1126">发 送</div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--        <div class="comjobs">-->
+        <!--            <div class="tit">-->
+        <!--                <div class="t">该公司的其他职位</div>-->
+        <!--                <div class="more link_gray6"><a href="http://127.0.0.1/company/company-jobs-534&#45;&#45;.htm">更多</a></div>-->
+        <!--                <div class="clear"></div>-->
+        <!--            </div>-->
+        <!--            <div class="list">-->
+        <!--                该公司暂无其他职位-->
+        <!--            </div>-->
+        <!--        </div>-->
+    </div>
+    <div class="clear"></div>
+</div>
+<!--<div class="footer_min" id="footer">-->
+<!--    <div class="links link_gray6">-->
+<!--        <a target="_blank" href="http://127.0.0.1/index.htm">网站首页</a>-->
+<!--        | <a target="_blank" href="http://127.0.0.1/explain/explain-show-1.htm">关于我们</a>| <a target="_blank"-->
+<!--                                                                                             href="http://127.0.0.1/explain/explain-show-4.htm">产品服务</a>|-->
+<!--        <a target="_blank" href="http://127.0.0.1/explain/explain-show-6.htm">推广合作</a>| <a target="_blank"-->
+<!--                                                                                           href="http://127.0.0.1/explain/explain-show-8.htm">招贤纳士</a>|-->
+<!--        <a target="_blank" href="http://127.0.0.1/explain/explain-show-5.htm">法律申明</a>| <a target="_blank"-->
+<!--                                                                                           href="http://127.0.0.1/explain/explain-show-7.htm">联系我们</a>-->
+<!--        | <a target="_blank" href="http://127.0.0.1/suggest/index.htm">意见建议</a>-->
+<!--    </div>-->
+<!--    <div class="txt">-->
+
+<!--        联系地址：西安市碑林区南二环西段123号富秦大厦六楼 联系电话：猎聘部 029-89338785-202<br>-->
+
+<!--        Copyright © 2018 www.wenchuanglcw.com 陕西文创人力资源管理有限公司 All Right Reserved 陕ICP备17010070号-->
+<!--    </div>-->
+<!--</div>-->
+
+<div class="">
+    <div class=""></div>
+</div>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="/Application/Home/View/wgg02/public/js/PIE.js"></script>
+<script type="text/javascript">
+    (function ($) {
+        $.pie = function (name, v) {
+            // 如果没有加载 PIE 则直接终止
+            if (!PIE) return false;
+            // 是否 jQuery 对象或者选择器名称
+            var obj = typeof name == 'object' ? name : $(name);
+            // 指定运行插件的 IE 浏览器版本
+            var version = 9;
+            // 未指定则默认使用 ie10 以下全兼容模式
+            if (typeof v != 'number' && v < 9) {
+                version = v;
+            }
+            // 可对指定的多个 jQuery 对象进行样式兼容
+            if ($.browser.msie && obj.size() > 0) {
+                if ($.browser.version * 1 <= version * 1) {
+                    obj.each(function () {
+                        PIE.attach(this);
+                    });
+                }
+            }
+        }
+    })(jQuery);
+    if ($.browser.msie) {
+        $.pie('.pie_about');
+    }
+    ;
+</script>
+<![endif]-->
+<script type="text/javascript" src="{% static 'companies/jquery.disappear.tooltip.js' %}"></script>
+<div class="disappear_tooltip pie_about" style="left: 562.5px; top: 433.5px;">
+    <div class="icon"></div>
+    <div class="content"></div>
+</div>
+<div class="floatmenu">
+    <div class="item mobile">
+        <a class="blk"></a>
+        <div class="popover popover1">
+            <div class="popover-bd">
+                <label>手机APP</label>
+                <span class="img-qrcode img-qrcode-mobile"><img src=""
+                                                                alt=""></span>
+            </div>
+        </div>
+        <div class="popover">
+            <div class="popover-bd">
+                <label class="wx">企业微信</label>
+                <span class="img-qrcode img-qrcode-wechat"><img src=""
+                                                                alt=""></span>
+            </div>
+            <div class="popover-arr"></div>
+        </div>
+    </div>
+    <div class="item ask">
+        <a class="blk" target="_blank" href="http://127.0.0.1/suggest/index.htm"></a>
+    </div>
+    <div id="backtop" class="item backtop" style="display: none;"><a class="blk"></a></div>
+</div>
+<input type="hidden" id="post_id" value="{{post.id}}">
+<script language="JavaScript">
+
+    var global = {
+        h: $(window).height(),
+        st: $(window).scrollTop(),
+        backTop: function () {
+            global.st > (global.h * 0.5) ? $("#backtop").show() : $("#backtop").hide();
+        }
+    }
+    $('#backtop').on('click', function () {
+        $("html,body").animate({"scrollTop": 0}, 500);
+    });
+    global.backTop();
+    $(window).scroll(function () {
+        global.h = $(window).height();
+        global.st = $(window).scrollTop();
+        global.backTop();
+    });
+    $(window).resize(function () {
+        global.h = $(window).height();
+        global.st = $(window).scrollTop();
+        global.backTop();
+    });
+    // 客服QQ
+    var app_qq = "在线客服";
+    var qq_open = "1";
+    if (app_qq != '' && qq_open == 1) {
+        var QQFloatUrl = "/Qqfloat/Index/index.htm";
+        $.getJSON(QQFloatUrl, function (result) {
+            if (result.status == 1) {
+                //$(".qq-float").html(result.data);
+                $("body").append(result.data);
+            }
+        });
+    }
+</script>
+<script src="{% static 'recruit_manager/js/layui/layui.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'companies/jquery.modal.dialog.js' %}"></script>
+<script src="{% static 'companies/gt.js' %}"></script>
+<script type="text/javascript">
+    $('.get-money-fail-suc').css({
+        left: ($(window).width() - $('.get-money-fail-suc').outerWidth()) / 2,
+        top: ($(window).height() - $('.get-money-fail-suc').outerHeight()) / 2 + $(document).scrollTop()
+    });
+    $('.gm-fs-group .gm-fs-clo').die().live('click', function () {
+        $(this).closest('.get-money-fail-suc').remove();
+        $('.modal_backdrop').remove();
+    });
+    $.getJSON("/AjaxCommon/jobs_click.htm", {id: "652"}, function (result) {
+        if (result.status == 1) {
+            $('#J_jobs_click').html(result.data + '次');
+        }
+    });
+    window._bd_share_config = {
+        common: {
+            bdText: "银行大堂经理-西安雁塔恒通村镇银行-文创猎才网",
+            bdDesc: "银行大堂经理-西安雁塔恒通村镇银行-文创猎才网",
+            bdUrl: "http://127.0.0.1/jobs/jobs-show-652-.htm",
+            bdPic: "http://127.0.0.1/data/upload/company_logo/1809/06/c399862d3b9d6b76c8436e924a68c45b.png"
+        },
+        share: [{
+            "tag": "share_1",
+            "bdCustomStyle": "/Application/Home/View/tpl_company/default/css/jobs.css"
+        }]
+    }
+    with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+    var isVisitor = "";
+    $(document).ready(function () {
+        $.getJSON("/ajaxCommon/company_statistics_add.htm", {comid: "534", jobid: "652"});
+        // 点击显示地图
+        $("#J_map").die().live('click', function () {
+            var qsDialog = $(this).dialog({
+                title: '工作地点',
+                loading: true,
+                showFooter: false,
+                border: false
+            });
+            qsDialog.setContent('<div id="container" style="width:800px;height:500px;"></div>');
+            var map = new BMap.Map("container");       // 创建地图实例
+            var opts = {
+                width: 350,     // 信息窗口宽度
+                height: 80,     // 信息窗口高度
+                title: "西安雁塔恒通村镇银行"  // 信息窗口标题
+            }
+            var infoWindow = new BMap.InfoWindow("", opts);  // 创建信息窗口对象
+            var point = new BMap.Point("0.000000", "0.000000");  // 创建点坐标
+            map.centerAndZoom(point, "0");
+            var qs_marker = new BMap.Marker(point);        // 创建标注
+            map.addOverlay(qs_marker);
+            map.openInfoWindow(infoWindow, point);
+            map.setCenter(point);
+            map.addControl(new BMap.NavigationControl());//添加鱼骨
+            map.enableScrollWheelZoom();//启用滚轮放大缩小，默认禁用。
+        });
+
+        // 收藏职位点击事件绑定
+        $(".favor").die().live('click', function () {
+            var url = "/ajaxPersonal/jobs_favorites.htm";
+            var jid = "652";
+            if ((isVisitor > 0)) {
+                $.getJSON(url, {jid: jid}, function (result) {
+                    if (result.status == 1) {
+                        disapperTooltip('success', result.msg);
+                    } else {
+                        disapperTooltip('remind', result.msg);
+                    }
+                });
+            } else {
+                var qsDialog = $(this).dialog({
+                    loading: true,
+                    footer: false,
+                    header: false,
+                    border: false,
+                    backdrop: false
+                });
+                var loginUrl = "/AjaxCommon/get_login_dig.htm";
+                $.getJSON(loginUrl, function (result) {
+                    if (result.status == 1) {
+                        qsDialog.hide();
+                        var qsDialogSon = $(this).dialog({
+                            title: '会员登录',
+                            content: result.data.html,
+                            footer: false,
+                            border: false
+                        });
+                        qsDialogSon.setInnerPadding(false);
+                    } else {
+                        qsDialog.hide();
+                        disapperTooltip('remind', result.msg);
+                    }
+                });
+            }
+        });
+
+        // 申请职位点击事件绑定
+        $(".apply_jobs").die().live('click', function () {
+            var qsDialog = $(this).dialog({
+                loading: true,
+                footer: false,
+                header: false,
+                border: false,
+                backdrop: false
+            });
+            if (eval(qscms.smsTatus)) {
+                var url = "/ajaxPersonal/resume_apply.htm";
+                var jid = "652";
+                $.getJSON(url, {jid: jid}, function (result) {
+                    if (result.status == 1) {
+                        if (result.data.html) {
+                            qsDialog.hide();
+                            if (result.data.rid) {
+                                var qsDialogSon = $(this).dialog({
+                                    title: '申请职位',
+                                    content: result.data.html,
+                                    yes: function () {
+                                        var url = "/Personal/index.htm";
+                                        url = url.replace('rid', result.data.rid);
+                                        location.href = url;
+                                    },
+                                    btns: ['完善简历', '放弃申请']
+                                });
+                            } else {
+                                var qsDialogSon = $(this).dialog({
+                                    title: '申请职位',
+                                    content: result.data.html
+                                });
+                            }
+                        } else {
+                            qsDialog.hide();
+                            disapperTooltip("remind", result.msg);
+                        }
+                    } else if (result.data == 1) {
+                        qsDialog.hide();
+                        disapperTooltip('remind', result.msg);
+                        setTimeout(function () {
+                            location.href = "/Personal/resume_add.htm";
+                        }, 1000);
+                    } else {
+                        var regResume = "0";
+                        if (regResume == 1) {
+                            if (eval(result.dialog)) {
+                                var creatsUrl = "/AjaxPersonal/resume_add_dig.htm";
+                                $.getJSON(creatsUrl, {jid: jid}, function (result) {
+                                    if (result.status == 1) {
+                                        qsDialog.hide();
+                                        var qsDialogSon = $(this).dialog({
+                                            content: result.data.html,
+                                            footer: false,
+                                            header: false,
+                                            border: false
+                                        });
+                                        qsDialogSon.setInnerPadding(false);
+                                    } else {
+                                        qsDialog.hide();
+                                        disapperTooltip('remind', result.msg);
+                                    }
+                                });
+                            } else {
+                                qsDialog.hide();
+                                disapperTooltip('remind', result.msg);
+                            }
+                        } else {
+                            var loginUrl = "/AjaxCommon/get_login_dig.htm";
+                            $.getJSON(loginUrl, function (result) {
+                                if (result.status == 1) {
+                                    qsDialog.hide();
+                                    var qsDialogSon = $(this).dialog({
+                                        title: '会员登录',
+                                        content: result.data.html,
+                                        footer: false,
+                                        border: false
+                                    });
+                                    qsDialogSon.setInnerPadding(false);
+                                } else {
+                                    qsDialog.hide();
+                                    disapperTooltip('remind', result.msg);
+                                }
+                            });
+                        }
+                    }
+                });
+            } else {
+                var loginUrl = "/AjaxCommon/get_login_dig.htm";
+                $.getJSON(loginUrl, function (result) {
+                    if (result.status == 1) {
+                        qsDialog.hide();
+                        var qsDialogSon = $(this).dialog({
+                            title: '会员登录',
+                            content: result.data.html,
+                            footer: false,
+                            border: false
+                        });
+                        qsDialogSon.setInnerPadding(false);
+                    } else {
+                        qsDialog.hide();
+                        disapperTooltip('remind', result.msg);
+                    }
+                });
+            }
+        });
+        var qrcode_bind_time,
+            waiting_weixin_bind = function () {
+                $.getJSON("/Home/Members/waiting_weixin_bind.htm");
+            };
+        $(".apply_allowance").die().live('click', function () {
+            var qsDialog = $(this).dialog({
+                loading: true,
+                footer: false,
+                header: false,
+                border: false,
+                backdrop: false
+            });
+            var loginUrl = "/AjaxCommon/get_login_dig.htm";
+            $.getJSON(loginUrl, function (result) {
+                if (result.status == 1) {
+                    qsDialog.hide();
+                    var qsDialogSon = $(this).dialog({
+                        title: '会员登录',
+                        content: result.data.html,
+                        footer: false,
+                        border: false
+                    });
+                    qsDialogSon.setInnerPadding(false);
+                } else {
+                    qsDialog.hide();
+                    disapperTooltip('remind', result.msg);
+                }
+            });
+        });
+
+        // 简历处理率提示
+        $('.slitxthelp').hover(function () {
+            $(this).find('.tip').show();
+        }, function () {
+            $(this).find('.tip').hide();
+        })
+    });
+
+    // 立即登录
+    $('.J_resadd').die().live('click', function () {
+        var qsDialog = $(this).dialog({
+            loading: true,
+            footer: false,
+            header: false,
+            border: false,
+            backdrop: false
+        });
+        var loginUrl = "/AjaxCommon/get_login_dig.htm";
+        $.getJSON(loginUrl, function (result) {
+            if (result.status == 1) {
+                qsDialog.hide();
+                var qsDialogSon = $(this).dialog({
+                    title: '会员登录',
+                    content: result.data.html,
+                    footer: false,
+                    border: false
+                });
+                qsDialogSon.setInnerPadding(false);
+            } else {
+                qsDialog.hide();
+                disapperTooltip('remind', result.msg);
+            }
+        });
+    });
+
+    // 给我留言
+    $('.J_realyBth').die().live('click', function () {
+        var u = $(this),
+            f = u.closest('.J_realyWrap').find('textarea'),
+            t = $.trim(f.val()),
+            touid = u.attr('touid');
+        $.post("/Personal/msg_feedback_send.htm", {touid: touid, message: t}, function (result) {
+            if (result.status == 1) {
+                f.val('');
+                disapperTooltip('success', result.msg);
+            } else {
+                if (eval(result.dialog)) {
+                    var qsDialog = $(this).dialog({
+                        loading: true,
+                        footer: false,
+                        header: false,
+                        border: false,
+                        backdrop: false
+                    });
+                    var loginUrl = "/AjaxCommon/get_login_dig.htm";
+                    $.getJSON(loginUrl, function (result) {
+                        if (result.status == 1) {
+                            qsDialog.hide();
+                            var qsDialogSon = $(this).dialog({
+                                title: '会员登录',
+                                content: result.data.html,
+                                footer: false,
+                                border: false
+                            });
+                            qsDialogSon.setInnerPadding(false);
+                        } else {
+                            qsDialog.hide();
+                            disapperTooltip('remind', result.msg);
+                        }
+                    });
+                } else {
+                    disapperTooltip('remind', result.msg);
+                }
+            }
+        }, 'json');
+    });
+
+    // 点击查看联系方式
+    $('.J_check_truenum').die().live('click', function () {
+        if (!(isVisitor > 0)) {
+            var qsDialog = $(this).dialog({
+                loading: true,
+                footer: false,
+                header: false,
+                border: false,
+                backdrop: false
+            });
+            var loginUrl = "/AjaxCommon/get_login_dig.htm";
+            $.getJSON(loginUrl, function (result) {
+                if (result.status == 1) {
+                    qsDialog.hide();
+                    var qsDialogSon = $(this).dialog({
+                        title: '会员登录',
+                        content: result.data.html,
+                        footer: false,
+                        border: false
+                    });
+                    qsDialogSon.setInnerPadding(false);
+                } else {
+                    qsDialog.hide();
+                    disapperTooltip('remind', result.msg);
+                }
+            });
+        } else {
+            var utype = "";
+            if (utype == 1) {
+                disapperTooltip('remind', '请登录个人账号！');
+            } else {
+                disapperTooltip('remind', '请先填写一份简历');
+                setTimeout(function () {
+                    location.href = "/Personal/resume_add.htm";
+                }, 1000);
+            }
+        }
+    });
+
+    //举报职位
+    $(".report").click(function () {
+        var jobs_id = "652";
+        var url = "/AjaxPersonal/report_jobs.htm";
+        var qsDialog = $(this).dialog({
+            loading: true,
+            footer: false,
+            header: false,
+            border: false,
+            backdrop: false
+        });
+        $.getJSON(url, {jobs_id: jobs_id}, function (result) {
+            if (result.status == 1) {
+                qsDialog.hide();
+                var qsDialogSon = $(this).dialog({
+                    title: '举报职位',
+                    content: result.data,
+                    footer: false
+                });
+            } else {
+                if (eval(result.dialog)) {
+                    var loginUrl = "/AjaxCommon/get_login_dig.htm";
+                    $.getJSON(loginUrl, function (result) {
+                        if (result.status == 1) {
+                            qsDialog.hide();
+                            var qsDialogSon = $(this).dialog({
+                                title: '会员登录',
+                                content: result.data.html,
+                                footer: false,
+                                border: false
+                            });
+                            qsDialogSon.setInnerPadding(false);
+                        } else {
+                            qsDialog.hide();
+                            disapperTooltip('remind', result.msg);
+                        }
+                    });
+                } else {
+                    qsDialog.hide();
+                    disapperTooltip('remind', result.msg);
+                }
+            }
+        });
+    });
+
+
+    function ganxinqu() {
+        console.log(213)
+        layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function () {
+            var laydate = layui.laydate //日期
+                , laypage = layui.laypage //分页
+                , layer = layui.layer //弹层
+                , table = layui.table //表格
+                , carousel = layui.carousel //轮播
+                , upload = layui.upload //上传
+                , element = layui.element; //元素操作 等等...
+
+
+            layer.prompt({title: '请输入您的姓名',}, function (title, index) {
+                layer.close(index);
+                layer.prompt({title: '请输入手机号',}, function (content, index) {
+                    //
+                    var post_id = $('#post_id').val()
+                    $.post("/view/job_commit", {
+                        post_id: post_id,
+                        username: title,
+                        phone_number: content,
+                        status: 2
+                    }, function (result) {
+                        layer.close(index);
+                        layer.msg('操作成功');
+                    });
+
+                });
+            });
+        });
+
+    }
+
+    function buganxinqu() {
+        console.log(213)
+        layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element'], function () {
+            var laydate = layui.laydate //日期
+                , laypage = layui.laypage //分页
+                , layer = layui.layer //弹层
+                , table = layui.table //表格
+                , carousel = layui.carousel //轮播
+                , upload = layui.upload //上传
+                , element = layui.element; //元素操作 等等...
+
+
+            layer.prompt({title: '请输入您的姓名',}, function (title, index) {
+                if(title==''){
+                    layer.msg('姓名不能为空')
+                    return false
+                }
+                layer.close(index);
+                layer.prompt({title: '请输入手机号',}, function (content, index) {
+                    if(content==''){
+                    layer.msg('手机号不能为空')
+                    return false
+                }
+                    //
+                    var post_id = $('#post_id').val()
+                    $.post("/view/job_commit", {
+                        post_id: post_id,
+                        username: title,
+                        phone_number: content,
+                        status: 8
+                    }, function (result) {
+                        layer.close(index);
+                        layer.msg('操作成功');
+                    });
+
+                });
+            });
+        });
+
+    }
+
+</script>
+</body>
+</html>

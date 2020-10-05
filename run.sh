@@ -1,0 +1,1 @@
+gunicorn -b 0.0.0.0:8002 ordov.wsgi:application --workers=1 --threads=10 --timeout=1800

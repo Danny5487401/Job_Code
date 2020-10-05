@@ -1,0 +1,3266 @@
+{% extends "recruit_manager/table_basic.html" %}
+{% load static %}
+{% block content %}
+<style>
+    .color-dropdown-wrapper li {
+        list-style: none;
+    }
+
+    .color-dropdown-wrapper .color-list {
+        overflow: hidden;
+        padding-left: 0;
+    }
+
+    .color-dropdown-wrapper li a {
+        display: block;
+        color: #333;
+        width: 116px;
+        padding: 0 10px;
+        line-height: 30px;
+        font-size: 12px;
+        text-decoration: none;
+    }
+
+    /*不显示框框了*/
+    .color-dropdown-wrapper li .color-block {
+        /*border: 1px solid #ddd;*/
+        /*width: 11px;*/
+        /*height: 11px;*/
+        /*display: inline-block;*/
+        /*margin-right: 5px;*/
+    }
+
+    .color-dropdown-wrapper .colors-panel-title, .color-dropdown-wrapper .colors-suggest-title {
+        margin: 0;
+        font-size: 12px;
+        line-height: 24px;
+    }
+
+    .color-dropdown-wrapper .colors-panel .color-tag {
+        float: left;
+    }
+
+    .color-dropdown-wrapper .colors-panel {
+        padding: 10px 20px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .color-dropdown-wrapper .color-group-panel {
+        float: left;
+        background: #fff;
+        overflow: hidden;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .color-dropdown-wrapper li a {
+        display: block;
+        color: #333;
+        width: 116px;
+        padding: 0 10px;
+        line-height: 30px;
+        font-size: 12px;
+        text-decoration: none;
+    }
+
+    .color-dropdown-wrapper {
+        background: #fff;
+        border: 1px solid #e5e5e5;
+        color: #333;
+        font-size: 12px;
+        overflow: hidden;
+    }
+
+    .color-dropdown-wrapper.color-group-wrapper {
+        width: 700px;
+    }
+
+    .color-dropdown-wrapper li:hover {
+        background: #EEEEEE;
+    }
+
+    .colors-panel::before {
+        content: "";
+        width: 1px;
+        background-color: #e5e5e5;
+        position: absolute;
+        top: 15px;
+        bottom: 15px;
+        display: block;
+        left: 0;
+    }
+
+</style>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/i18n/defaults-*.min.js"></script>
+
+<form name='filter_form' id="post_filter_form" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <?--Project Info-->
+    <div clasv class="card">
+        <div class="card-header" id="headingTwo">
+            <strong>填写公司信息</strong>
+        </div>
+        <div class="card-body" style="padding: 0.5rem;">
+            <div class="row">
+                <div class="col-md-3 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">公司名称 *</span>
+                    </div>
+                    <input type="text" class="form-control" name="company_name" id="company_id" value="">
+                </div>
+
+                <div style="display: none;" class="col-md-3 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">部门名称 *</span>
+                    </div>
+                    <input type="text" class="form-control" name="department_name" id="department_id" value="">
+                </div>
+
+                <div class="col-md-3 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">岗位名称 *</span>
+                    </div>
+                    <input type="text" class="form-control" name="post_name" id="post_id" value="">
+                </div>
+
+                <div style="display: none;" class="col-md-3 input-group">
+                    <div class="input-group-prepend">
+                        <span style="display: none;"  class="input-group-text" id="basic-addon1">岗位类型 *</span>
+                    </div>
+                    <input type="text" class="form-control" name="post_type" id="post_type_id" value="">
+                </div>
+                <?-- Innter Filter-->
+            </div>
+        </div>
+    </div>
+    <?-- Filter -->
+
+    <?--Project Info-->
+    <div id="base_apppend" class="card">
+        <div class="card-header" id="headingTwo">
+            <strong>岗位要求设置</strong>
+            <button type="button" style="background-color: #beed9e;float: right;" onclick="appendAddress()"
+                    class="btn btn-sm">追加地址
+            </button>
+        </div>
+
+        <div id="distpicker" class="card-body" style="padding: 0.5rem;">
+            <div class="row">
+                <?-- Inner Filter -->
+
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">工作地点.省</span>
+                    </div>
+                    <!--                    <input type="text" class="form-control" name="working_place_province" id="province_id"-->
+                    <!--                           placeholder="省" value=""></input>-->
+                    <select name="working_place_province" class="form-control" id="province_id"></select>
+                </div>
+
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3" style="width:84px">*工作地点.市</span>
+                    </div>
+                    <!--                    <input type="text" class="form-control" name="working_place_city" id="city_id" placeholder="市"-->
+                    <!--                           value=""></input>-->
+                    <select name="working_place_city" class="form-control" id="city_id"></select>
+                </div>
+
+
+                <div style="display: none" class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">工作地点.区</span>
+                    </div>
+                    <!--                    <input type="text" class="form-control" name="working_place_district" id="district_id"-->
+                    <!--                           placeholder="区" value=""></input>-->
+                    <select name="working_place_district" class="form-control" id="district_id"></select>
+
+                </div>
+
+
+                <div style="display: none" class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">工作地点.街道</span>
+                    </div>
+                    <!--                    <input type="text" class="form-control" name="working_place_district" id="district_id"-->
+                    <!--                           placeholder="区" value=""></input>-->
+                    <select name="working_place_street" class="form-control" id="street_id">
+
+                    </select>
+
+                </div>
+
+                <div style="display: none" class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">工作地点.详细</span>
+                    </div>
+                    <input type="text" class="form-control" name="address_suite" id="address_suite" placeholder="详细地址"
+                           value=""/>
+                </div>
+
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">最小年龄</span>
+                    </div>
+                    <input type="text" class="form-control" name="age_id_min" id="age_id_min" placeholder="0"
+                           value=""></input>
+                </div>
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon4">最大年龄</span>
+                    </div>
+                    <input type="text" class="form-control" name="age_id_max" id="age_id_max" placeholder="最高年龄"
+                           value=""></input>
+                </div>
+
+
+
+                <?-- Innter Filter-->
+                <!--            </div>-->
+                <!--            <div class="row">-->
+                <?-- Inner Filter -->
+
+                <div class="col-md-2 input-group" style="width: 20px">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1" style="width:70px">最低学历</span>
+                    </div>
+                    <select class="form-control" id="degree_id_min" name="degree_id_min" aria-labelledby="basic-addon1">
+                        <option value="不限">不限</option>
+                        <option value="小学">小学</option>
+                        <option value="初中">初中</option>
+                        <option value="高中">高中</option>
+                        <option value="中专">中专</option>
+                        <option value="大专">大专</option>
+                        <option value="本科">本科</option>
+                        <option value="硕士">硕士</option>
+                        <option value="博士">博士</option>
+                        <option value="博士后">博士后</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:70px">最高学历</span>
+                    </div>
+                    <select class="form-control" id="degree_id_max" name="degree_id_max" aria-labelledby="basic-addon2">
+                        <option value="不限">不限</option>
+                        <option value="小学">小学</option>
+                        <option value="初中">初中</option>
+                        <option value="高中">高中</option>
+                        <option value="中专">中专</option>
+                        <option value="大专">大专</option>
+                        <option value="本科">本科</option>
+                        <option value="硕士">硕士</option>
+                        <option value="博士">博士</option>
+                        <option value="博士后">博士后</option>
+                    </select>
+                </div>
+
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:90px">毕业区间Start</span>
+                    </div>
+                    <select class="form-control" id="graduate_time_start" name="graduate_time_start"
+                            aria-labelledby="basic-addon1">
+                        <option>不限</option>
+                        <option>2000</option>
+                        <option>2001</option>
+                        <option>2002</option>
+                        <option>2003</option>
+                        <option>2004</option>
+                        <option>2005</option>
+                        <option>2006</option>
+                        <option>2007</option>
+                        <option>2008</option>
+                        <option>2009</option>
+                        <option>2010</option>
+                        <option>2011</option>
+                        <option>2012</option>
+                        <option>2013</option>
+                        <option>2014</option>
+                        <option>2015</option>
+                        <option>2016</option>
+                        <option>2017</option>
+                        <option>2018</option>
+                        <option>2019</option>
+                    </select>
+                </div>
+
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:90px">毕业区间.End</span>
+                    </div>
+                    <select class="form-control" id="graduate_time_end" name="graduate_time_end"
+                            aria-labelledby="basic-addon1">
+                        <option>不限</option>
+                        <option>2000</option>
+                        <option>2001</option>
+                        <option>2002</option>
+                        <option>2003</option>
+                        <option>2004</option>
+                        <option>2005</option>
+                        <option>2006</option>
+                        <option>2007</option>
+                        <option>2008</option>
+                        <option>2009</option>
+                        <option>2010</option>
+                        <option>2011</option>
+                        <option>2012</option>
+                        <option>2013</option>
+                        <option>2014</option>
+                        <option>2015</option>
+                        <option>2016</option>
+                        <option>2017</option>
+                        <option>2018</option>
+                        <option>2019</option>
+                    </select>
+
+                </div>
+
+                <!--                <div>-->
+
+                <!--                <div   id="distpicker" class="form-inline">-->
+
+                <!--</div>-->
+                <!--                </div>-->
+
+                <!--            </div>-->
+
+                <!--            <div class="row">-->
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:70px">性别</span>
+                    </div>
+                    <select class="form-control" name="gender_id" id="gender_id">
+                        <option>不限</option>
+                        <option>男</option>
+                        <option>女</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">简历最后更新时间</span>
+                    </div>
+                    <input type="text" class="form-control" name="resume_latest_modified" id="last_modified_time"
+                           value="1970-01-01"></input>
+                </div>
+
+
+                <!--                <div class="col-md-2 form-group" style="display:none;">-->
+                <!--                    <label> 工作地点 </label>-->
+                <!--                    <select class="form-control" id="province_id">-->
+                <!--                        <option>不限</option>-->
+                <!--                        <option>北京</option>-->
+                <!--                        <option>上海</option>-->
+                <!--                        <option>杭州</option>-->
+                <!--                    </select>-->
+                <!--                </div>-->
+
+                <?-- Innter Filter-->
+            </div>
+        </div>
+    </div>
+    <?-- Filter -->
+
+    <!-- 岗位标签 -->
+    <?--Project Info-->
+    <div clasv class="card">
+        <div class="card-header" id="headingTwo">
+            <strong>岗位标签</strong>
+        </div>
+
+        <div id="tags" class="card-body" style="padding: 0.5rem;">
+            <div class="row">
+
+
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:70px">行业类别</span>
+                    </div>
+
+                    <input type="text" autocomplete="off" class="form-control select-hangye" name="hangyeleibie"
+                           id="hangyeleibie"
+                           placeholder=""
+                           value=""/>
+                </div>
+
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:70px">岗位类别</span>
+                    </div>
+
+                    <input type="text" autocomplete="off" class="form-control select-gangwei" name="gangweileibie"
+                           id="gangweileibie"
+                           placeholder=""
+                           value=""/>
+                </div>
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:70px">岗位级别</span>
+                    </div>
+
+                    <select class="form-control" id="gangweijibie" name="gangweijibie"
+                            aria-labelledby="basic-addon2">
+                    </select>
+                </div>
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:70px">岗位作息</span>
+                    </div>
+
+                    <select class="form-control" id="gangweizuoxi" name="gangweizuoxi"
+                            aria-labelledby="basic-addon2">
+                    </select>
+                </div>
+            </div>
+
+            <div style="padding: 5px 0; color: #ccc"></div>
+
+
+            <div class="row">
+
+
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:80px;height: 35px">社保公积金</span>
+                    </div>
+
+                    <select class="form-control" id="shebaogongjijin" name="shebaogongjijin"
+                            aria-labelledby="basic-addon2">
+                    </select>
+                </div>
+
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:80px;height: 35px">岗位特征</span>
+                    </div>
+
+                    <input autocomplete="off" style="height: 35px" type="text" class="form-control" id="gangweitezheng"
+                           name="gangweitezheng"/>
+                </div>
+
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:80px;height: 35px">薪资待遇</span>
+                    </div>
+
+                    <input autocomplete="off" type="text" class="form-control" name="xinzidaiyu" id="xinzidaiyu"
+                           placeholder=""
+                           value=""/>
+                </div>
+
+                <?-- Innter Filter-->
+            </div>
+        </div>
+    </div>
+    <?-- Filter -->
+
+
+    <!-- 岗位要求 -->
+    <div style="" class="card">
+        <div class="card-header" id="headingTwo">
+            <strong>岗位标签要求</strong>
+        </div>
+        <div id="tags1" class="card-body" style="padding: 0.5rem;">
+            <div class="row">
+
+
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:70px">行业类别</span>
+                    </div>
+                    <input autocomplete="off" type="text" class="form-control select-hangye1" name="hangyeleibie1"
+                           id="hangyeleibie1"
+                           placeholder=""
+                           value=""/>
+                    <label>&gt; </label>
+                    <input type="text" autocomplete="off" class="form-control" name="hangyeleibie_val"
+                           id="hangyeleibie_val"
+                           placeholder=""
+                           value=""/>
+
+                    <!--                        <input type="text" autocomplete="off" class="form-control select-hangye" name="hangyeleibie"-->
+                    <!--                               id="hangyeleibie"-->
+                    <!--                               placeholder=""-->
+                    <!--                               value=""/>-->
+                </div>
+
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:70px">岗位类别</span>
+                    </div>
+                    <input autocomplete="off" type="text" class="form-control select-gangwei1" name="gangweileibie1"
+                           id="gangweileibie1"
+                           placeholder=""
+                           value=""/>
+                    <label>&gt; </label>
+                    <input type="text" autocomplete="off" class="form-control" name="gangweileibie_val"
+                           id="gangweileibie_val"
+                           placeholder=""
+                           value=""/>
+                    <!--              <input type="text" autocomplete="off" class="form-control select-gangwei" name="gangweileibie"-->
+                    <!--                     id="gangweileibie"-->
+                    <!--                     placeholder=""-->
+                    <!--                     value=""/>-->
+                </div>
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:70px">岗位级别</span>
+                    </div>
+
+                    <select class="form-control" id="gangweijibie1" name="gangweijibie1"
+                            aria-labelledby="basic-addon2">
+                    </select>
+
+                    <label>&gt; </label>
+                    <input type="text" autocomplete="off" class="form-control" name="gangweijibie_val"
+                           id="gangweijibie_val"
+                           placeholder=""
+                           value=""/>
+                </div>
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:70px">岗位作息</span>
+                    </div>
+
+                    <select class="form-control" id="gangweizuoxi1" name="gangweizuoxi1"
+                            aria-labelledby="basic-addon2">
+                    </select>
+
+                    <label>&gt; </label>
+                    <input type="text" autocomplete="off" class="form-control" name="gangweizuoxi_val"
+                           id="gangweizuoxi_val"
+                           placeholder=""
+                           value=""/>
+                </div>
+            </div>
+
+            <div style="padding: 5px 0; color: #ccc"></div>
+
+
+            <div class="row">
+
+
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon2"
+                                          style="width:80px;height: 35px">社保公积金</span>
+                    </div>
+
+                    <select class="form-control" id="shebaogongjijin1" name="shebaogongjijin1"
+                            aria-labelledby="basic-addon2">
+                    </select>
+
+
+                    <label>&gt; </label>
+                    <input type="text" autocomplete="off" class="form-control" name="shebaogongjijin_val"
+                           id="shebaogongjijin_val"
+                           placeholder=""
+                           value=""/>
+                </div>
+
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:80px;height: 35px">岗位特征</span>
+                    </div>
+                    <!--                    <select class="form-control" id="gangweitezheng1" name="gangweitezheng1"-->
+                    <!--                            aria-labelledby="basic-addon1">-->
+
+                    <!--                    </select>-->
+                    <input autocomplete="off" style="height: 35px" type="text" class="form-control" id="gangweitezheng1"
+                           name="gangweitezheng1"/>
+
+                    <label>&gt; </label>
+                    <input type="text" autocomplete="off" class="form-control" name="gangweitezheng_val"
+                           id="gangweitezheng_val"
+                           placeholder=""
+                           value=""/>
+                    <!--              <input autocomplete="off" style="height: 35px" type="text" class="form-control"-->
+                    <!--                     id="gangweitezheng"-->
+                    <!--                     name="gangweitezheng"/>-->
+                </div>
+
+                <div class="col-md-4 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2" style="width:80px;height: 35px">薪资待遇</span>
+                    </div>
+
+                    <input autocomplete="off" type="text" class="form-control" name="xinzidaiyu1" id="xinzidaiyu1"
+                           placeholder=""
+                           value=""/>
+                </div>
+
+                <?-- Innter Filter-->
+            </div>
+        </div>
+    </div>
+
+    <!-- 标签要求结束 --->
+
+
+    <?--Project Info-->
+    <div clasv class="card">
+        <div class="card-header" id="headingFour">
+            <strong>岗位其他信息</strong>
+        </div>
+        <div class="card-body" style="padding: 0.5rem;">
+            <div class="row">
+                <div class="col-md-3 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">起薪</span>
+                    </div>
+                    <input type="text" class="form-control" name="min_salary_id" id="min_salary_id" placeholder="元/月"
+                           value=""></input>
+                </div>
+
+                <div class="col-md-3 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">公司联系人姓名</span>
+                    </div>
+                    <input type="text" class="form-control" name="linkman_name" id="linkman_name" placeholder=""
+                           value=""></input>
+                </div>
+
+                <div class="col-md-3 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">电话</span>
+                    </div>
+                    <input type="text" class="form-control" name="linkman_phone" id="linkman_phone" placeholder=""
+                           value=""></input>
+                </div>
+
+
+                <div class="col-md-3 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">百应任务 *</span>
+                    </div>
+                    <select class="form-control" id="baiying_task_id" name="baiying_task_id"
+                            aria-labelledby="basic-addon2">
+                    </select>
+                </div>
+
+                <?-- Innter Filter-->
+            </div>
+
+            <!--            <div style="padding: 5px 0; color: #ccc"></div>-->
+
+
+            <div style="display: none" class="row">
+                <div class="col-md-12 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">邀约录音</span>
+                        <input id="invite_voice" class="btn input-group-text" type="file" name="invite_voice">
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding: 5px 0; color: #ccc"></div>
+
+            <div style="display: none" class="row">
+                <div class="col-md-12 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">offer录音</span>
+                        <input class="btn input-group-text" type="file" name="offer_voice" id="offer_voice">
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding: 5px 0; color: #ccc"></div>
+
+
+            <div class="row">
+                <div class="col-md-10 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">必问问题</span>
+                        <!--                        <input class="btn input-group-text" type="text" name="question">-->
+                    </div>
+                    <input type="text" class="form-control" name="question" id="question" placeholder=""
+                           value=""></input>
+                </div>
+            </div>
+
+            <div style="padding: 5px 0; color: #ccc"></div>
+
+            <input type="text" name="keywords" style="display: none" id="keywords" value=""/>
+
+            <div id="keywords_group" class="btn-group">
+                <!--                <button onclick="removeKeyword()" style="background-color: #f7e64c;" type="button"-->
+                <!--                        class="stage_two_dail btn btn-sm ">福利好-->
+                <!--                </button>-->
+            </div>
+            <div style="padding: 5px 0; color: #ccc"></div>
+
+            <div class="btn-group">
+                <button onclick="addKeyword()" style="background-color: #55e2f7" type="button"
+                        class="stage_two_dail btn btn-sm ">添加关键词
+                </button>
+            </div>
+
+            <div style="padding: 5px 0; color: #ccc"></div>
+
+            <style>
+                .w-e-text-container {
+                    height: 120px !important;
+
+                /*!important是重点，因为原div是行内样式设置的高度300px*/
+
+            </style>
+
+            <div class="row">
+                <div class="col-md-12 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">&nbsp;&nbsp;&nbsp;&nbsp;话术指引*&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <div id="talk_hint_editor">
+
+                        </div>
+                        <textarea style="display: none" id="talk_hint" name="talk_hint">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div style="padding: 5px 0; color: #ccc"></div>
+            <div class="row">
+                <div class="col-md-12 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开场白*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <div id="prologue_editor">
+
+                        </div>
+                        <textarea style="display: none" id="prologue" name="prologue"
+                                  style="width:800px;height:150px">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding: 5px 0; color: #ccc"></div>
+            <div class="row">
+                <div class="col-md-12 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">沟通工作地点*</span>
+                        <div id="workplace_editor">
+
+                        </div>
+                        <textarea style="display: none" id="workplace" name="workplace"
+                                  style="width:800px;height:150px">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding: 5px 0; color: #ccc"></div>
+            <div class="row">
+                <div class="col-md-12 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">沟通工作意愿*</span>
+                        <div id="work_purpose_editor">
+
+                        </div>
+                        <textarea style="display: none" id="work_purpose" name="work_purpose"
+                                  style="width:800px;height:150px">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding: 5px 0; color: #ccc"></div>
+            <div class="row">
+                <div class="col-md-12 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">添加微信邀请*</span>
+                        <div id="wechat_invite_editor">
+
+                        </div>
+                        <textarea style="display: none" id="wechat_invite" name="wechat_invite"
+                                  style="width:800px;height:150px">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding: 5px 0; color: #ccc"></div>
+            <div class="row">
+                <div class="col-md-12 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">邀约短信模板*</span>
+                        <div id="yaoyuemuban_editor" style="display: none">
+
+                        </div>
+                        <textarea  id="yaoyuemuban" name="yaoyuemuban"
+                                  style="width:800px;height:150px">
+                        </textarea>
+                    </div>
+                </div>
+            </div>    
+
+            <div style="padding: 5px 0; color: #ccc"></div>
+            <div class="row">
+                <div class="col-md-12 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">面试短信模板*</span>
+                        <div id="mianshimuban_editor" style="display: none" >
+
+                        </div>
+                        <textarea id="mianshimuban" name="mianshimuban"
+                                  style="width:800px;height:150px">
+                        </textarea>
+                    </div>
+                </div>
+            </div>    
+
+            <div style="padding: 5px 0; color: #ccc"></div>
+            <div class="row">
+                <div class="col-md-12 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">offer短信模板*</span>
+                        <div id="offermuban_editor" style="display: none">
+
+                        </div>
+                        <textarea id="offermuban" name="offermuban"
+                                  style="width:800px;height:150px">
+                        </textarea>
+                    </div>
+                </div>
+            </div>                   
+
+
+        </div>
+        <input style="display: none;" name="id" id="id" value=""/>
+    </div>
+    </div>
+    <?-- Filter -->
+
+    <div class="row col-md-24 mt-1">
+        <div class="col-md-3 form-group">
+            <button type='button' class="btn btn-primary" id='post_button_id'>确认修改</button>
+        </div>
+    </div>
+</form>
+
+<!--<div class="table-responsive">-->
+<!--    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>ID</th>-->
+<!--            <th>Project</th>-->
+<!--            <th>*Company</th>-->
+<!--            <th>*Department</th>-->
+<!--            <th>*Name</th>-->
+<!--            <th>Place</th>-->
+<!--            <th>*JD</th>-->
+<!--            <th>Link</th>-->
+<!--            <th>Request</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--    </table>-->
+<!--</div>-->
+{% endblock %}
+
+{% block extra_js %}
+<!-- wangEditor -->
+<script type="text/javascript" src="//unpkg.com/wangeditor/release/wangEditor.min.js"></script>
+<script src="https://cdn.bootcss.com/distpicker/1.0.4/distpicker.data.js"></script>
+<script src="https://qnode.oss-cn-beijing.aliyuncs.com/cityspick.js"></script>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    ul,
+    li {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .combox-box {
+        width: 160px;
+        height: 24px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        overflow: hidden;
+        font-size: 14px;
+        padding: 2px 4px;
+        white-space: nowrap;
+    }
+
+    .combox-box:hover {
+        border-color: rgb(0, 185, 122);
+    }
+
+    .combox-box:focus {
+        border-color: rgb(0, 185, 122);
+        box-shadow: 0px 1px 6px rgba(0, 185, 122, 0.32);
+    }
+
+    .combox-warpper {
+        z-index: 101;
+        display: none;
+        height: 180px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        font-size: 14px;
+        overflow: hidden;
+    }
+
+    .combox-warpper ul {
+        height: calc(100% - 28px);
+        position: absolute;
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 100%;
+        outline: none;
+    }
+
+    .combox-warpper .search-check {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 28px;
+        line-height: 28px;
+        padding: 0px 2px;
+        border: 1px solid rgba(211, 223, 225, 1)
+    }
+
+    .combox-warpper.active {
+        display: block;
+    }
+
+    .combox-warpper {
+        background: rgba(255, 255, 255, 1);
+        border: 1px solid rgba(220, 222, 228, 1);
+        box-shadow: 0px 2px 4px rgba(0, 28, 41, 0.08);
+    }
+
+    .combox-warpper li {
+        cursor: pointer;
+        clear: both;
+        line-height: 22px;
+        white-space: nowrap;
+        padding: 2px 4px;
+        padding-left: 8px;
+        margin: 1px 0;
+    }
+
+    .combox-warpper li:hover {
+        background: #ededed
+    }
+
+    .combox-warpper li.checked {
+        background: #ededed
+    }
+
+
+    .check-icon {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        width: 20px;
+    }
+
+    .check-icon::before {
+        content: "\f096";
+    }
+
+    .checked .check-icon::before {
+        content: "\f14a";
+    }
+</style>
+<script>
+    var Combox = function (elem, options) {
+        this.elem = $(elem);
+        this.options = $.extend(true, {}, this.options, options);
+        this.init();
+    }
+    Combox.prototype = {
+        options: {
+            data: null,
+            itemclick: null,
+            selectData: [],
+            filterText: '',
+            filterData: [],
+            height: '180px',
+            id: "id",
+            name: "name",
+            filterField: "name",
+            inputClick: function () {
+            },  //选择框点击
+            valueChange: function () {
+            }
+        },
+        init: function () {
+            var me = this,
+                opt = me.options,
+                elem = me.elem;
+            opt.filterField = opt.name;
+            var id = elem[0].id;
+            var combListId = opt.combListId = id + "-container";
+            if ($("#" + combListId).length > 0) return false;
+
+            elem.addClass('combox-box');
+            me.loadData(opt.data);
+            //展开隐藏
+            elem.on("click", function (e) {
+                e.stopPropagation()
+
+                $("#" + id + "-container").toggleClass("active");
+                me.options.inputClick.call(this, $("#" + id + "-container"));
+
+                //清空select时(外部清空功能，外部将selectData清除下拉展开时情况选项)
+                // if (opt.selectData.length == 0) {
+                //     for (var i = 0; i < opt.data.length; i++) {
+                //         opt.data[i].checked = false;
+                //     }
+                // }
+
+                //展开时清空filter,
+                opt.filterText = '';
+                opt.filterData = me._toFilter(opt.data, opt.filterText, opt.filterField);
+                me._renderComboxList();
+
+                //判断全选(根据dom)
+                if ($(".check-item").length == $(".check-item.checked").length && $(".check-item").length > 0) {
+                    $("#" + combListId + " .checkAll").addClass("checked");
+                } else if ($("#" + combListId + " .checkAll").hasClass("checked")) {
+                    $("#" + combListId + " .checkAll").removeClass("checked");
+                }
+            })
+            //点击其他区域隐藏
+            $(document).on("click", function (e) {
+                e.stopPropagation();
+                $("#" + id + "-container").removeClass("active");
+            })
+            //点击搜索
+            $(document).on("click", ".search-check", function (e) {
+                e.stopPropagation();
+            })
+            //搜索改变
+            $(document).on("change", ".search-check", function (e) {
+                opt.filterText = $(this).val();
+                opt.filterData = me._toFilter(opt.data, opt.filterText, opt.filterField);
+                me._renderComboxList();
+                //判断全选(根据dom)
+                if ($(".check-item").length == $(".check-item.checked").length && $(".check-item").length > 0) {
+                    $("#" + combListId + " .checkAll").addClass("checked");
+                } else if ($("#" + combListId + " .checkAll").hasClass("checked")) {
+                    $("#" + combListId + " .checkAll").removeClass("checked");
+                }
+            })
+            //选择
+            $(document).on("click", "#" + combListId + " .check-item", function (e) {
+                e.stopPropagation();
+                var id = this.id;
+                $(this).toggleClass("checked");
+
+
+                if ($(this).hasClass("checked")) {
+                    var item = me.getDataById(id);
+                    opt.selectData.push(item);
+                } else {
+                    opt.selectData = opt.selectData.reduce(function (res, item) {
+                        if (item[opt.id] != id) {
+                            res.push(item);
+                        }
+                        return res;
+                    }, []);
+                }
+
+                //判断全选(根据dom)
+                if ($(".check-item").length == $(".check-item.checked").length && $(".check-item").length > 0) {
+                    $("#" + combListId + " .checkAll").addClass("checked");
+                } else if ($("#" + combListId + " .checkAll").hasClass("checked")) {
+                    $("#" + combListId + " .checkAll").removeClass("checked");
+                }
+
+                me._showSelectText();
+                me._assignSelectData();
+                opt.valueChange.call(me, {data: opt.data, filterData: opt.filterData, selectData: opt.selectData});
+            });
+            //全选
+            $(document).on("click", "#" + combListId + " .checkAll", function (e) {
+                e.stopPropagation();
+                $(this).toggleClass("checked");
+                if ($(this).hasClass("checked")) {
+                    $("#" + combListId).find(".check-item").addClass("checked");
+                    opt.selectData = opt.selectData.concat(opt.filterData);
+                } else {
+                    $("#" + combListId).find(".check-item").removeClass("checked");
+                    var _selectData = [];
+                    for (var i = 0; i < opt.selectData.length; i++) {
+                        _selectData[opt.selectData[i][opt.id]] = opt.selectData[i];
+                    }
+                    for (var j = 0; j < opt.filterData.length; j++) {
+                        if (_selectData[opt.filterData[j][opt.id]]) {
+                            delete _selectData[opt.filterData[j][opt.id]];
+                        }
+                    }
+                    opt.selectData = Object.values(_selectData);
+                }
+                //合并data和selectData
+                me._assignSelectData();
+                me._showSelectText();
+                opt.valueChange.call(me, {data: opt.data, filterData: opt.filterData, selectData: opt.selectData});
+            })
+        },
+        loadData: function (data) {
+            this.options.data = data || [];
+            this._initSelected(this.options.data);
+            this.refresh();
+        },
+        refresh: function () {
+            this._render();
+        },
+        getDataById: function (id) {
+            var data = this.options.data;
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                if (item[this.options.id] == id) {
+                    return item;
+                }
+            }
+        },
+        getSelectId: function () {
+            var selectData = this.options.selectData;
+            return selectData.map(item => item[this.options.id]);
+        },
+        _render: function () {
+            var data = this.options.data || [];
+            this.options.filterData = this._toFilter(data, this.options.filterText, this.options.filterField);
+            this._renderCombox(data);
+
+            this._showSelectText();
+
+        },
+        _showSelectText: function () {
+            var me = this,
+                opt = me.options,
+                elem = me.elem,
+                selectData = opt.selectData;
+            var jointext = []
+            for (var i = 0; i < selectData.length; i++) {
+                jointext.push(opt.selectData[i][opt.name]);
+            }
+
+            if (elem[0].tagName === "INPUT") {
+                elem.val(jointext.join(","));
+            } else {
+                elem.text(jointext.join(","));
+            }
+
+            elem.attr("title", jointext.join("，"));
+
+        },
+        _initSelected: function (data) {
+            var me = this;
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].checked) {
+                    me.options.selectData.push(data[i]);
+                }
+
+            }
+        },
+        _toFilter: function (data, filterText, filterField) {
+
+            return data.filter(function (value) {
+                return value[filterField].indexOf(filterText) > -1;
+            })
+        },
+        _renderCombox: function (data) {
+
+            var me = this,
+                elem = me.elem,
+                opt = me.options,
+                combListId = opt.combListId;
+
+            var width = elem.outerWidth();
+            var height = elem.outerHeight();
+            var left = elem.offset().left;
+            var top = elem.offset().top;
+
+            var sb = ['<div id="' + combListId + '" class="combox-warpper"  style="position:absolute;width:' + width + 'px;left:' + left + 'px;top:' + (top + height) + 'px;height:' + opt.height + '">'];
+
+            sb[sb.length] = '</div>';
+            $(document.body).append(sb.join(""));
+            this._renderComboxList();
+        },
+        _renderComboxList: function () {
+            var me = this,
+                opt = me.options;
+
+            var filterData = opt.filterData;
+            var sb = [];
+            sb[sb.length] = '<ul >';
+            sb[sb.length] = '<li class="checkAll"><i class="check-icon"></i>全选</li>';
+            for (var i = 0; i < filterData.length; i++) {
+                var item = filterData[i];
+                sb[sb.length] = '<li id="' + item[opt.id] + '" class="check-item';
+                if (item.checked) {
+                    sb[sb.length] = ' checked ';
+                }
+                sb[sb.length] = '"><i class="check-icon"></i>' + item[opt.name] + '</li>';
+            }
+            sb[sb.length] = '</ul>';
+            sb[sb.length] = '<input placeholder="回车查询" class="search-check" autocomplete="off" value=' + opt.filterText + '>';
+            $("#" + opt.combListId + ".combox-warpper").html(sb.join(""));
+        },
+        _assignSelectData() {
+            var me = this,
+                opt = me.options;
+            selectdata = opt.selectData,
+                data = opt.data;
+            data = data.concat(selectdata);
+            data = data.reduce(function (res, item) {
+                item.checked = false;
+                if (res[item[opt.id]]) {
+                    res[item[opt.id]]["checked"] = true;
+                } else {
+                    res[item[opt.id]] = item;
+                }
+                return res;
+            }, {});
+            opt.data = Object.values(data);
+        }
+    }
+
+    $.fn.combox = function (options) {
+
+        var isSTR = typeof options == "string",
+            args, ret;
+
+        if (isSTR) {
+            args = $.makeArray(arguments)
+            args.splice(0, 1);
+        }
+
+        var name = "combox",
+            type = Combox;
+
+        var jq = this.each(function () {
+            var ui = $.data(this, name);
+
+            if (!ui) {
+                ui = new type(this, options);
+                $.data(this, name, ui);
+            }
+            if (isSTR) {
+                ret = ui[options].apply(ui, args);
+            }
+        });
+
+        return isSTR ? ret : jq;
+    };
+
+</script>
+<script>
+
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+    function xhr_common_send(method, url, data, succCallback = null) {
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+
+        var csrftoken = getCookie('csrftoken');
+
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        console.log("------------------------------------>")
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) { //if complete
+                // 2xx is ok, ref: https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    if (succCallback) {
+                        succCallback(JSON.parse(xhr.response))
+                    }
+                    console.log("success")
+                } else {
+                    console.log("csrftoken: ", csrftoken)
+                    console.log(xhr.responseText)
+                    console.log(xhr.status)
+                    console.log(xhr.statusText)
+                    console.log(url)
+                    console.log(data)
+                    alert("Something error happend\n");
+                }
+            }
+        }
+        xhr.send(JSON.stringify(data));
+    }
+
+
+
+
+    var $distpicker = $('#distpicker');
+    //
+    // $distpicker.distpicker({
+    //     province: '',
+    //     city: '',
+    //     district: ''
+    // });
+</script>
+<script>
+    /*!
+* selectColor.js
+* Author: JSMask
+* Date:	2017
+*/
+    var SelectColor = (function () {
+        var d = null;
+        var c = [];
+        var b = {
+            elem: ".select-color",
+            range: "|",
+            left: 0,
+            index: 0,
+            data:
+                [{
+                    colorName: "白色系",
+                    colorNum: "rgb(255, 255, 255)",
+                    colorList: [{colorName: "乳白色", colorNum: "rgb(255, 251, 240)"}, {
+                        colorName: "白色",
+                        colorNum: "rgb(255, 255, 2255)"
+                    }, {colorName: "米白色", colorNum: "rgb(238, 222, 176)"}]
+                }, {
+                    colorName: "灰色系",
+                    colorNum: "rgb(128, 128, 128)",
+                    colorList: [{colorName: "浅灰色", colorNum: "rgb(228, 228, 228)"}, {
+                        colorName: "深灰色",
+                        colorNum: "rgb(102, 102, 102)"
+                    }, {colorName: "灰色", colorNum: "rgb(128, 128, 128)"}, {
+                        colorName: "银色",
+                        colorNum: "rgb(192, 192, 192)"
+                    }]
+                }, {
+                    colorName: "黑色系",
+                    colorNum: "rgb(0, 0, 0)",
+                    colorList: [{colorName: "黑色", colorNum: "rgb(0, 0, 0)"}]
+                }, {
+                    colorName: "红色系",
+                    colorNum: "rgb(255, 0, 0)",
+                    colorList: [{colorName: "桔红色", colorNum: "rgb(255, 117, 0)"}, {
+                        colorName: "玫红色",
+                        colorNum: "rgb(223, 27, 118)"
+                    }, {colorName: "粉红色", colorNum: "rgb(255, 182, 193)"}, {
+                        colorName: "红色",
+                        colorNum: "rgb(255, 0, 0)"
+                    }, {colorName: "藕色", colorNum: "rgb(238, 208, 216)"}, {
+                        colorName: "西瓜红",
+                        colorNum: "rgb(240, 86, 84)"
+                    }, {colorName: "酒红色", colorNum: "rgb(153, 0, 0)"}]
+                }, {
+                    colorName: "黄色系",
+                    colorNum: "rgb(255, 255, 0)",
+                    colorList: [{colorName: "卡其色", colorNum: "rgb(195, 176, 145)"}, {
+                        colorName: "姜黄色",
+                        colorNum: "rgb(255, 199, 115)"
+                    }, {colorName: "明黄色", colorNum: "rgb(255, 255, 1)"}, {
+                        colorName: "杏色",
+                        colorNum: "rgb(247, 238, 214)"
+                    }, {colorName: "柠檬黄", colorNum: "rgb(255, 236, 67)"}, {
+                        colorName: "桔色",
+                        colorNum: "rgb(255, 165, 0)"
+                    }, {colorName: "浅黄色", colorNum: "rgb(250, 255, 114)"}, {
+                        colorName: "荧光黄",
+                        colorNum: "rgb(234, 255, 86)"
+                    }, {colorName: "金色", colorNum: "rgb(255, 215, 0)"}, {
+                        colorName: "香槟色",
+                        colorNum: "rgb(255, 249, 177)"
+                    }, {colorName: "黄色", colorNum: "rgb(255, 255, 0)"}]
+                }, {
+                    colorName: "绿色系",
+                    colorNum: "rgb(0, 128, 0)",
+                    colorList: [{colorName: "军绿色", colorNum: "rgb(93, 118, 42)"}, {
+                        colorName: "墨绿色",
+                        colorNum: "rgb(0,87,55)"
+                    }, {colorName: "浅绿色", colorNum: "rgb(152, 251, 152)"}, {
+                        colorName: "绿色",
+                        colorNum: "rgb(0, 128, 0)"
+                    }, {colorName: "翠绿色", colorNum: "rgb(10, 163, 68)"}, {
+                        colorName: "荧光绿",
+                        colorNum: "rgb(35, 250, 7)"
+                    }, {colorName: "青色", colorNum: "rgb(0, 224, 158)"}]
+                }, {
+                    colorName: "蓝色系",
+                    colorNum: "rgb(0, 0, 254)",
+                    colorList: [{colorName: "天蓝色", colorNum: "rgb(68, 206, 246)"}, {
+                        colorName: "孔雀蓝",
+                        colorNum: "rgb(0, 164, 197)"
+                    }, {colorName: "宝蓝色", colorNum: "rgb(75, 92, 196)"}, {
+                        colorName: "浅蓝色",
+                        colorNum: "rgb(210, 240, 244)"
+                    }, {colorName: "深蓝色", colorNum: "rgb(4, 22, 144)"}, {
+                        colorName: "湖蓝色",
+                        colorNum: "rgb(48, 223, 243)"
+                    }, {colorName: "蓝色", colorNum: "rgb(0, 0, 254)"}, {colorName: "藏青色", colorNum: "rgb(46, 78, 126)"}]
+                }, {
+                    colorName: "紫色系",
+                    colorNum: "rgb(128, 0, 128)",
+                    colorList: [{colorName: "浅紫色", colorNum: "rgb(237, 224, 230)"}, {
+                        colorName: "深紫色",
+                        colorNum: "rgb(67, 6, 83)"
+                    }, {colorName: "紫红色", colorNum: "rgb(139, 0, 98)"}, {
+                        colorName: "紫罗兰",
+                        colorNum: "rgb(183, 172, 228)"
+                    }, {colorName: "紫色", colorNum: "rgb(128, 0, 128)"}]
+                }, {
+                    colorName: "棕色系",
+                    colorNum: "rgb(124, 75, 0)",
+                    colorList: [{colorName: "巧克力色", colorNum: "rgb(210,105,30)"}, {
+                        colorName: "标土棕",
+                        colorNum: "rgb(115,74,18)"
+                    }, {colorName: "赭色", colorNum: "rgb(160,82,45)"}, {
+                        colorName: "乌贼墨棕",
+                        colorNum: "rgb(94,38,18)"
+                    }, {colorName: "沙棕色", colorNum: "rgb(244,164,96)"}, {
+                        colorName: "栗色",
+                        colorNum: "rgb(125, 0, 0)"
+                    }, {colorName: "棕色", colorNum: "rgb(124, 75, 0)"}]
+                }]
+        };
+        var e = Object.assign || function (j) {
+            for (var g = 1; g < arguments.length; g++) {
+                var h = arguments[g];
+                for (var f in h) {
+                    if (Object.prototype.hasOwnProperty.call(h, f)) {
+                        j[f] = h[f]
+                    }
+                }
+            }
+            return j
+        };
+
+        function a() {
+            d = e({}, b, arguments[0]);
+            var f = this;
+            this.index = d.index;
+            this.createElement(function () {
+                f.render()
+            })
+        }
+
+        a.prototype.createElement = function (f) {
+            this.mainbox = document.createElement("div");
+            this.nav = document.createElement("ul");
+            this.box = document.createElement("div");
+            this.colorlist = document.createElement("ul");
+            $(this.mainbox).addClass("color-group-wrapper color-dropdown-wrapper");
+            $(this.nav).addClass("color-group-panel");
+            $(this.box).addClass("colors-panel");
+            $(this.colorlist).addClass("color-list");
+            $(this.box).html('<p class="colors-panel-title"></p>');
+            $(this.box).append(this.colorlist);
+            $(this.mainbox).append(this.nav);
+            $(this.mainbox).append(this.box);
+            f && f()
+        };
+        a.prototype.render = function () {
+            var l = this;
+            var h = $(this.mainbox);
+            var n = $(this.nav);
+            var k = $(this.colorlist);
+            var g = $(d.elem);
+            var f = null;
+            var o = "";
+            var m = "";
+            for (var j = 0; j < d.data.length; j++) {
+                o += '<li class="color-tag" data-index="' + j + '">' + '<a href="#">' + '<div class="color-block" style="background:' + d.data[j]["colorNum"] + ';"></div>' + "<span>" + d.data[j]["colorName"] + "</span>" + "</a>" + "</li>"
+            }
+            n.html(o);
+            k.html(this.createList());
+            $("body").append(this.mainbox);
+            n.find("li.color-tag").hover(function (p) {
+                p.stopPropagation();
+                var i = $(this).attr("data-index");
+                if (i == l.index) {
+                    return
+                }
+                l.index = i;
+                k.html(l.createList())
+            });
+            $("body").on("click", ".color-group-panel li.color-tag", function (i) {
+                i.stopPropagation()
+            });
+            $("body").on("click", ".color-list li.color-tag", function (q) {
+                q.stopPropagation();
+                var p = $(this).attr("data-index");
+                console.log('p', p);
+                console.log('d.data[l.index]["colorList"]', d.data[l.index]["colorList"])
+                console.log('d', d)
+                var i = d.data[l.index]["colorList"][p]["colorName"];
+                console.log(f)
+                if (f.val() != "") {
+                    c = f.val().split(d.range)
+                } else {
+                    c = []
+                }
+                if (c.indexOf(i) != -1) {
+                    return
+                }
+
+                //给当前加背景
+                // $(this).attr({"background":'#EEEEEE'});
+
+                c.push(i);
+                f.val(c.join(d.range));
+                c.length = 0
+            });
+            h.css({display: "none"});
+            g.off("click").on("click", function (q) {
+                q.stopPropagation();
+                f = $(this);
+                if (f.val() != "") {
+                    c = f.val().split(d.range)
+                }
+                var p = f.offset().left + d.left;
+                var i = f.offset().top + f.get(0).offsetHeight;
+                h.css({position: "absolute", left: p, top: i, display: "block", zIndex: "2999"});
+                $("html").off("click").on("click", function () {
+                    h.hide()
+                })
+            })
+        };
+        a.prototype.createList = function () {
+            var h = "";
+            var f = this.index;
+            var j = d.data[f]["colorList"];
+            for (var g = 0; g < j.length; g++) {
+                h += '<li class="color-tag" data-index="' + g + '">' + '<a href="#">' + '<div class="color-block" style="background:' + j[g]["colorNum"] + ';"></div>' + "<span>" + j[g]["colorName"] + "</span>" + "</a>" + "</li>"
+            }
+            return h
+        };
+        return a
+    }());
+    var SelectColor1 = (function () {
+        var d = null;
+        var c = [];
+        var b = {
+            elem: ".select-color",
+            range: "|",
+            left: 0,
+            index: 0,
+            data: [{
+                colorName: "白色系",
+                colorNum: "rgb(255, 255, 255)",
+                colorList: [{colorName: "乳白色", colorNum: "rgb(255, 251, 240)"}, {
+                    colorName: "白色",
+                    colorNum: "rgb(255, 255, 2255)"
+                }, {colorName: "米白色", colorNum: "rgb(238, 222, 176)"}]
+            }, {
+                colorName: "灰色系",
+                colorNum: "rgb(128, 128, 128)",
+                colorList: [{colorName: "浅灰色", colorNum: "rgb(228, 228, 228)"}, {
+                    colorName: "深灰色",
+                    colorNum: "rgb(102, 102, 102)"
+                }, {colorName: "灰色", colorNum: "rgb(128, 128, 128)"}, {colorName: "银色", colorNum: "rgb(192, 192, 192)"}]
+            }, {
+                colorName: "黑色系",
+                colorNum: "rgb(0, 0, 0)",
+                colorList: [{colorName: "黑色", colorNum: "rgb(0, 0, 0)"}]
+            }, {
+                colorName: "红色系",
+                colorNum: "rgb(255, 0, 0)",
+                colorList: [{colorName: "桔红色", colorNum: "rgb(255, 117, 0)"}, {
+                    colorName: "玫红色",
+                    colorNum: "rgb(223, 27, 118)"
+                }, {colorName: "粉红色", colorNum: "rgb(255, 182, 193)"}, {
+                    colorName: "红色",
+                    colorNum: "rgb(255, 0, 0)"
+                }, {colorName: "藕色", colorNum: "rgb(238, 208, 216)"}, {
+                    colorName: "西瓜红",
+                    colorNum: "rgb(240, 86, 84)"
+                }, {colorName: "酒红色", colorNum: "rgb(153, 0, 0)"}]
+            }, {
+                colorName: "黄色系",
+                colorNum: "rgb(255, 255, 0)",
+                colorList: [{colorName: "卡其色", colorNum: "rgb(195, 176, 145)"}, {
+                    colorName: "姜黄色",
+                    colorNum: "rgb(255, 199, 115)"
+                }, {colorName: "明黄色", colorNum: "rgb(255, 255, 1)"}, {
+                    colorName: "杏色",
+                    colorNum: "rgb(247, 238, 214)"
+                }, {colorName: "柠檬黄", colorNum: "rgb(255, 236, 67)"}, {
+                    colorName: "桔色",
+                    colorNum: "rgb(255, 165, 0)"
+                }, {colorName: "浅黄色", colorNum: "rgb(250, 255, 114)"}, {
+                    colorName: "荧光黄",
+                    colorNum: "rgb(234, 255, 86)"
+                }, {colorName: "金色", colorNum: "rgb(255, 215, 0)"}, {
+                    colorName: "香槟色",
+                    colorNum: "rgb(255, 249, 177)"
+                }, {colorName: "黄色", colorNum: "rgb(255, 255, 0)"}]
+            }, {
+                colorName: "绿色系",
+                colorNum: "rgb(0, 128, 0)",
+                colorList: [{colorName: "军绿色", colorNum: "rgb(93, 118, 42)"}, {
+                    colorName: "墨绿色",
+                    colorNum: "rgb(0,87,55)"
+                }, {colorName: "浅绿色", colorNum: "rgb(152, 251, 152)"}, {
+                    colorName: "绿色",
+                    colorNum: "rgb(0, 128, 0)"
+                }, {colorName: "翠绿色", colorNum: "rgb(10, 163, 68)"}, {
+                    colorName: "荧光绿",
+                    colorNum: "rgb(35, 250, 7)"
+                }, {colorName: "青色", colorNum: "rgb(0, 224, 158)"}]
+            }, {
+                colorName: "蓝色系",
+                colorNum: "rgb(0, 0, 254)",
+                colorList: [{colorName: "天蓝色", colorNum: "rgb(68, 206, 246)"}, {
+                    colorName: "孔雀蓝",
+                    colorNum: "rgb(0, 164, 197)"
+                }, {colorName: "宝蓝色", colorNum: "rgb(75, 92, 196)"}, {
+                    colorName: "浅蓝色",
+                    colorNum: "rgb(210, 240, 244)"
+                }, {colorName: "深蓝色", colorNum: "rgb(4, 22, 144)"}, {
+                    colorName: "湖蓝色",
+                    colorNum: "rgb(48, 223, 243)"
+                }, {colorName: "蓝色", colorNum: "rgb(0, 0, 254)"}, {colorName: "藏青色", colorNum: "rgb(46, 78, 126)"}]
+            }, {
+                colorName: "紫色系",
+                colorNum: "rgb(128, 0, 128)",
+                colorList: [{colorName: "浅紫色", colorNum: "rgb(237, 224, 230)"}, {
+                    colorName: "深紫色",
+                    colorNum: "rgb(67, 6, 83)"
+                }, {colorName: "紫红色", colorNum: "rgb(139, 0, 98)"}, {
+                    colorName: "紫罗兰",
+                    colorNum: "rgb(183, 172, 228)"
+                }, {colorName: "紫色", colorNum: "rgb(128, 0, 128)"}]
+            }, {
+                colorName: "棕色系",
+                colorNum: "rgb(124, 75, 0)",
+                colorList: [{colorName: "巧克力色", colorNum: "rgb(210,105,30)"}, {
+                    colorName: "标土棕",
+                    colorNum: "rgb(115,74,18)"
+                }, {colorName: "赭色", colorNum: "rgb(160,82,45)"}, {
+                    colorName: "乌贼墨棕",
+                    colorNum: "rgb(94,38,18)"
+                }, {colorName: "沙棕色", colorNum: "rgb(244,164,96)"}, {
+                    colorName: "栗色",
+                    colorNum: "rgb(125, 0, 0)"
+                }, {colorName: "棕色", colorNum: "rgb(124, 75, 0)"}]
+            }]
+        };
+        var e = Object.assign || function (j) {
+            for (var g = 1; g < arguments.length; g++) {
+                var h = arguments[g];
+                for (var f in h) {
+                    if (Object.prototype.hasOwnProperty.call(h, f)) {
+                        j[f] = h[f]
+                    }
+                }
+            }
+            return j
+        };
+
+        function a() {
+            d = e({}, b, arguments[0]);
+            var f = this;
+            this.index = d.index;
+            this.createElement(function () {
+                f.render()
+            })
+        }
+
+        a.prototype.createElement = function (f) {
+            this.mainbox = document.createElement("div");
+            this.nav = document.createElement("ul");
+            this.box = document.createElement("div");
+            this.colorlist = document.createElement("ul");
+            $(this.mainbox).addClass("color-group-wrapper color-dropdown-wrapper");
+            $(this.nav).addClass("color-group-panel");
+            $(this.box).addClass("colors-panel");
+            $(this.colorlist).addClass("color-list");
+            $(this.box).html('<p class="colors-panel-title"></p>');
+            $(this.box).append(this.colorlist);
+            $(this.mainbox).append(this.nav);
+            $(this.mainbox).append(this.box);
+            f && f()
+        };
+        a.prototype.render = function () {
+            var l = this;
+            var h = $(this.mainbox);
+            var n = $(this.nav);
+            var k = $(this.colorlist);
+            var g = $(d.elem);
+            var f = null;
+            var o = "";
+            var m = "";
+            for (var j = 0; j < d.data.length; j++) {
+                o += '<li class="color-tag1" data-index="' + j + '">' + '<a href="#">' + '<div class="color-block" style="background:' + d.data[j]["colorNum"] + ';"></div>' + "<span>" + d.data[j]["colorName"] + "</span>" + "</a>" + "</li>"
+            }
+            n.html(o);
+            k.html(this.createList());
+            $("body").append(this.mainbox);
+            n.find("li.color-tag1").hover(function (p) {
+                p.stopPropagation();
+                var i = $(this).attr("data-index");
+                if (i == l.index) {
+                    return
+                }
+                l.index = i;
+                k.html(l.createList())
+            });
+            $("body").on("click", ".color-group-panel li.color-tag1", function (i) {
+                i.stopPropagation()
+            });
+            $("body").on("click", ".color-list li.color-tag1", function (q) {
+                q.stopPropagation();
+                var p = $(this).attr("data-index");
+                console.log('p', p);
+                console.log('d.data[l.index]["colorList"]', d.data[l.index]["colorList"])
+                console.log('d', d)
+                var i = d.data[l.index]["colorList"][p]["colorName"];
+                console.log(f)
+                if (f.val() != "") {
+                    c = f.val().split(d.range)
+                } else {
+                    c = []
+                }
+                if (c.indexOf(i) != -1) {
+                    return
+                }
+
+                //给当前加背景
+                // $(this).attr({"background":'#EEEEEE'});
+
+                c.push(i);
+                f.val(c.join(d.range));
+                c.length = 0
+            });
+            h.css({display: "none"});
+            g.off("click").on("click", function (q) {
+                q.stopPropagation();
+                f = $(this);
+                if (f.val() != "") {
+                    c = f.val().split(d.range)
+                }
+                var p = f.offset().left + d.left;
+                var i = f.offset().top + f.get(0).offsetHeight;
+                h.css({position: "absolute", left: p, top: i, display: "block", zIndex: "2999"});
+                $("html").off("click").on("click", function () {
+                    h.hide()
+                })
+            })
+        };
+        a.prototype.createList = function () {
+            var h = "";
+            var f = this.index;
+            var j = d.data[f]["colorList"];
+            for (var g = 0; g < j.length; g++) {
+                h += '<li class="color-tag1" data-index="' + g + '">' + '<a href="#">' + '<div class="color-block" style="background:' + j[g]["colorNum"] + ';"></div>' + "<span>" + j[g]["colorName"] + "</span>" + "</a>" + "</li>"
+            }
+            return h
+        };
+        return a
+    }());
+    var SelectColo2 = (function () {
+        var d = null;
+        var c = [];
+        var b = {
+            elem: ".select-color",
+            range: "|",
+            left: 0,
+            index: 0,
+            data:
+                [{
+                    colorName: "白色系",
+                    colorNum: "rgb(255, 255, 255)",
+                    colorList: [{colorName: "乳白色", colorNum: "rgb(255, 251, 240)"}, {
+                        colorName: "白色",
+                        colorNum: "rgb(255, 255, 2255)"
+                    }, {colorName: "米白色", colorNum: "rgb(238, 222, 176)"}]
+                }, {
+                    colorName: "灰色系",
+                    colorNum: "rgb(128, 128, 128)",
+                    colorList: [{colorName: "浅灰色", colorNum: "rgb(228, 228, 228)"}, {
+                        colorName: "深灰色",
+                        colorNum: "rgb(102, 102, 102)"
+                    }, {colorName: "灰色", colorNum: "rgb(128, 128, 128)"}, {
+                        colorName: "银色",
+                        colorNum: "rgb(192, 192, 192)"
+                    }]
+                }, {
+                    colorName: "黑色系",
+                    colorNum: "rgb(0, 0, 0)",
+                    colorList: [{colorName: "黑色", colorNum: "rgb(0, 0, 0)"}]
+                }, {
+                    colorName: "红色系",
+                    colorNum: "rgb(255, 0, 0)",
+                    colorList: [{colorName: "桔红色", colorNum: "rgb(255, 117, 0)"}, {
+                        colorName: "玫红色",
+                        colorNum: "rgb(223, 27, 118)"
+                    }, {colorName: "粉红色", colorNum: "rgb(255, 182, 193)"}, {
+                        colorName: "红色",
+                        colorNum: "rgb(255, 0, 0)"
+                    }, {colorName: "藕色", colorNum: "rgb(238, 208, 216)"}, {
+                        colorName: "西瓜红",
+                        colorNum: "rgb(240, 86, 84)"
+                    }, {colorName: "酒红色", colorNum: "rgb(153, 0, 0)"}]
+                }, {
+                    colorName: "黄色系",
+                    colorNum: "rgb(255, 255, 0)",
+                    colorList: [{colorName: "卡其色", colorNum: "rgb(195, 176, 145)"}, {
+                        colorName: "姜黄色",
+                        colorNum: "rgb(255, 199, 115)"
+                    }, {colorName: "明黄色", colorNum: "rgb(255, 255, 1)"}, {
+                        colorName: "杏色",
+                        colorNum: "rgb(247, 238, 214)"
+                    }, {colorName: "柠檬黄", colorNum: "rgb(255, 236, 67)"}, {
+                        colorName: "桔色",
+                        colorNum: "rgb(255, 165, 0)"
+                    }, {colorName: "浅黄色", colorNum: "rgb(250, 255, 114)"}, {
+                        colorName: "荧光黄",
+                        colorNum: "rgb(234, 255, 86)"
+                    }, {colorName: "金色", colorNum: "rgb(255, 215, 0)"}, {
+                        colorName: "香槟色",
+                        colorNum: "rgb(255, 249, 177)"
+                    }, {colorName: "黄色", colorNum: "rgb(255, 255, 0)"}]
+                }, {
+                    colorName: "绿色系",
+                    colorNum: "rgb(0, 128, 0)",
+                    colorList: [{colorName: "军绿色", colorNum: "rgb(93, 118, 42)"}, {
+                        colorName: "墨绿色",
+                        colorNum: "rgb(0,87,55)"
+                    }, {colorName: "浅绿色", colorNum: "rgb(152, 251, 152)"}, {
+                        colorName: "绿色",
+                        colorNum: "rgb(0, 128, 0)"
+                    }, {colorName: "翠绿色", colorNum: "rgb(10, 163, 68)"}, {
+                        colorName: "荧光绿",
+                        colorNum: "rgb(35, 250, 7)"
+                    }, {colorName: "青色", colorNum: "rgb(0, 224, 158)"}]
+                }, {
+                    colorName: "蓝色系",
+                    colorNum: "rgb(0, 0, 254)",
+                    colorList: [{colorName: "天蓝色", colorNum: "rgb(68, 206, 246)"}, {
+                        colorName: "孔雀蓝",
+                        colorNum: "rgb(0, 164, 197)"
+                    }, {colorName: "宝蓝色", colorNum: "rgb(75, 92, 196)"}, {
+                        colorName: "浅蓝色",
+                        colorNum: "rgb(210, 240, 244)"
+                    }, {colorName: "深蓝色", colorNum: "rgb(4, 22, 144)"}, {
+                        colorName: "湖蓝色",
+                        colorNum: "rgb(48, 223, 243)"
+                    }, {colorName: "蓝色", colorNum: "rgb(0, 0, 254)"}, {colorName: "藏青色", colorNum: "rgb(46, 78, 126)"}]
+                }, {
+                    colorName: "紫色系",
+                    colorNum: "rgb(128, 0, 128)",
+                    colorList: [{colorName: "浅紫色", colorNum: "rgb(237, 224, 230)"}, {
+                        colorName: "深紫色",
+                        colorNum: "rgb(67, 6, 83)"
+                    }, {colorName: "紫红色", colorNum: "rgb(139, 0, 98)"}, {
+                        colorName: "紫罗兰",
+                        colorNum: "rgb(183, 172, 228)"
+                    }, {colorName: "紫色", colorNum: "rgb(128, 0, 128)"}]
+                }, {
+                    colorName: "棕色系",
+                    colorNum: "rgb(124, 75, 0)",
+                    colorList: [{colorName: "巧克力色", colorNum: "rgb(210,105,30)"}, {
+                        colorName: "标土棕",
+                        colorNum: "rgb(115,74,18)"
+                    }, {colorName: "赭色", colorNum: "rgb(160,82,45)"}, {
+                        colorName: "乌贼墨棕",
+                        colorNum: "rgb(94,38,18)"
+                    }, {colorName: "沙棕色", colorNum: "rgb(244,164,96)"}, {
+                        colorName: "栗色",
+                        colorNum: "rgb(125, 0, 0)"
+                    }, {colorName: "棕色", colorNum: "rgb(124, 75, 0)"}]
+                }]
+        };
+        var e = Object.assign || function (j) {
+            for (var g = 1; g < arguments.length; g++) {
+                var h = arguments[g];
+                for (var f in h) {
+                    if (Object.prototype.hasOwnProperty.call(h, f)) {
+                        j[f] = h[f]
+                    }
+                }
+            }
+            return j
+        };
+
+        function a() {
+            d = e({}, b, arguments[0]);
+            var f = this;
+            this.index = d.index;
+            this.createElement(function () {
+                f.render()
+            })
+        }
+
+        a.prototype.createElement = function (f) {
+            this.mainbox = document.createElement("div");
+            this.nav = document.createElement("ul");
+            this.box = document.createElement("div");
+            this.colorlist = document.createElement("ul");
+            $(this.mainbox).addClass("color-group-wrapper color-dropdown-wrapper");
+            $(this.nav).addClass("color-group-panel");
+            $(this.box).addClass("colors-panel");
+            $(this.colorlist).addClass("color-list");
+            $(this.box).html('<p class="colors-panel-title"></p>');
+            $(this.box).append(this.colorlist);
+            $(this.mainbox).append(this.nav);
+            $(this.mainbox).append(this.box);
+            f && f()
+        };
+        a.prototype.render = function () {
+            var l = this;
+            var h = $(this.mainbox);
+            var n = $(this.nav);
+            var k = $(this.colorlist);
+            var g = $(d.elem);
+            var f = null;
+            var o = "";
+            var m = "";
+            for (var j = 0; j < d.data.length; j++) {
+                o += '<li class="color-tag2" data-index="' + j + '">' + '<a href="#">' + '<div class="color-block" style="background:' + d.data[j]["colorNum"] + ';"></div>' + "<span>" + d.data[j]["colorName"] + "</span>" + "</a>" + "</li>"
+            }
+            n.html(o);
+            k.html(this.createList());
+            $("body").append(this.mainbox);
+            n.find("li.color-tag2").hover(function (p) {
+                p.stopPropagation();
+                var i = $(this).attr("data-index");
+                if (i == l.index) {
+                    return
+                }
+                l.index = i;
+                k.html(l.createList())
+            });
+            $("body").on("click", ".color-group-panel li.color-tag2", function (i) {
+                i.stopPropagation()
+            });
+            $("body").on("click", ".color-list li.color-tag2", function (q) {
+                q.stopPropagation();
+                var p = $(this).attr("data-index");
+                console.log('p', p);
+                console.log('d.data[l.index]["colorList"]', d.data[l.index]["colorList"])
+                console.log('d', d)
+                var i = d.data[l.index]["colorList"][p]["colorName"];
+                console.log(f)
+                if (f.val() != "") {
+                    c = f.val().split(d.range)
+                } else {
+                    c = []
+                }
+                if (c.indexOf(i) != -1) {
+                    return
+                }
+
+                //给当前加背景
+                // $(this).attr({"background":'#EEEEEE'});
+
+                c.push(i);
+                f.val(c.join(d.range));
+                c.length = 0
+            });
+            h.css({display: "none"});
+            g.off("click").on("click", function (q) {
+                q.stopPropagation();
+                f = $(this);
+                if (f.val() != "") {
+                    c = f.val().split(d.range)
+                }
+                var p = f.offset().left + d.left;
+                var i = f.offset().top + f.get(0).offsetHeight;
+                h.css({position: "absolute", left: p, top: i, display: "block", zIndex: "2999"});
+                $("html").off("click").on("click", function () {
+                    h.hide()
+                })
+            })
+        };
+        a.prototype.createList = function () {
+            var h = "";
+            var f = this.index;
+            var j = d.data[f]["colorList"];
+            for (var g = 0; g < j.length; g++) {
+                h += '<li class="color-tag2" data-index="' + g + '">' + '<a href="#">' + '<div class="color-block" style="background:' + j[g]["colorNum"] + ';"></div>' + "<span>" + j[g]["colorName"] + "</span>" + "</a>" + "</li>"
+            }
+            return h
+        };
+        return a
+    }());
+    var SelectColor3 = (function () {
+        var d = null;
+        var c = [];
+        var b = {
+            elem: ".select-color",
+            range: "|",
+            left: 0,
+            index: 0,
+            data: [{
+                colorName: "白色系",
+                colorNum: "rgb(255, 255, 255)",
+                colorList: [{colorName: "乳白色", colorNum: "rgb(255, 251, 240)"}, {
+                    colorName: "白色",
+                    colorNum: "rgb(255, 255, 2255)"
+                }, {colorName: "米白色", colorNum: "rgb(238, 222, 176)"}]
+            }, {
+                colorName: "灰色系",
+                colorNum: "rgb(128, 128, 128)",
+                colorList: [{colorName: "浅灰色", colorNum: "rgb(228, 228, 228)"}, {
+                    colorName: "深灰色",
+                    colorNum: "rgb(102, 102, 102)"
+                }, {colorName: "灰色", colorNum: "rgb(128, 128, 128)"}, {colorName: "银色", colorNum: "rgb(192, 192, 192)"}]
+            }, {
+                colorName: "黑色系",
+                colorNum: "rgb(0, 0, 0)",
+                colorList: [{colorName: "黑色", colorNum: "rgb(0, 0, 0)"}]
+            }, {
+                colorName: "红色系",
+                colorNum: "rgb(255, 0, 0)",
+                colorList: [{colorName: "桔红色", colorNum: "rgb(255, 117, 0)"}, {
+                    colorName: "玫红色",
+                    colorNum: "rgb(223, 27, 118)"
+                }, {colorName: "粉红色", colorNum: "rgb(255, 182, 193)"}, {
+                    colorName: "红色",
+                    colorNum: "rgb(255, 0, 0)"
+                }, {colorName: "藕色", colorNum: "rgb(238, 208, 216)"}, {
+                    colorName: "西瓜红",
+                    colorNum: "rgb(240, 86, 84)"
+                }, {colorName: "酒红色", colorNum: "rgb(153, 0, 0)"}]
+            }, {
+                colorName: "黄色系",
+                colorNum: "rgb(255, 255, 0)",
+                colorList: [{colorName: "卡其色", colorNum: "rgb(195, 176, 145)"}, {
+                    colorName: "姜黄色",
+                    colorNum: "rgb(255, 199, 115)"
+                }, {colorName: "明黄色", colorNum: "rgb(255, 255, 1)"}, {
+                    colorName: "杏色",
+                    colorNum: "rgb(247, 238, 214)"
+                }, {colorName: "柠檬黄", colorNum: "rgb(255, 236, 67)"}, {
+                    colorName: "桔色",
+                    colorNum: "rgb(255, 165, 0)"
+                }, {colorName: "浅黄色", colorNum: "rgb(250, 255, 114)"}, {
+                    colorName: "荧光黄",
+                    colorNum: "rgb(234, 255, 86)"
+                }, {colorName: "金色", colorNum: "rgb(255, 215, 0)"}, {
+                    colorName: "香槟色",
+                    colorNum: "rgb(255, 249, 177)"
+                }, {colorName: "黄色", colorNum: "rgb(255, 255, 0)"}]
+            }, {
+                colorName: "绿色系",
+                colorNum: "rgb(0, 128, 0)",
+                colorList: [{colorName: "军绿色", colorNum: "rgb(93, 118, 42)"}, {
+                    colorName: "墨绿色",
+                    colorNum: "rgb(0,87,55)"
+                }, {colorName: "浅绿色", colorNum: "rgb(152, 251, 152)"}, {
+                    colorName: "绿色",
+                    colorNum: "rgb(0, 128, 0)"
+                }, {colorName: "翠绿色", colorNum: "rgb(10, 163, 68)"}, {
+                    colorName: "荧光绿",
+                    colorNum: "rgb(35, 250, 7)"
+                }, {colorName: "青色", colorNum: "rgb(0, 224, 158)"}]
+            }, {
+                colorName: "蓝色系",
+                colorNum: "rgb(0, 0, 254)",
+                colorList: [{colorName: "天蓝色", colorNum: "rgb(68, 206, 246)"}, {
+                    colorName: "孔雀蓝",
+                    colorNum: "rgb(0, 164, 197)"
+                }, {colorName: "宝蓝色", colorNum: "rgb(75, 92, 196)"}, {
+                    colorName: "浅蓝色",
+                    colorNum: "rgb(210, 240, 244)"
+                }, {colorName: "深蓝色", colorNum: "rgb(4, 22, 144)"}, {
+                    colorName: "湖蓝色",
+                    colorNum: "rgb(48, 223, 243)"
+                }, {colorName: "蓝色", colorNum: "rgb(0, 0, 254)"}, {colorName: "藏青色", colorNum: "rgb(46, 78, 126)"}]
+            }, {
+                colorName: "紫色系",
+                colorNum: "rgb(128, 0, 128)",
+                colorList: [{colorName: "浅紫色", colorNum: "rgb(237, 224, 230)"}, {
+                    colorName: "深紫色",
+                    colorNum: "rgb(67, 6, 83)"
+                }, {colorName: "紫红色", colorNum: "rgb(139, 0, 98)"}, {
+                    colorName: "紫罗兰",
+                    colorNum: "rgb(183, 172, 228)"
+                }, {colorName: "紫色", colorNum: "rgb(128, 0, 128)"}]
+            }, {
+                colorName: "棕色系",
+                colorNum: "rgb(124, 75, 0)",
+                colorList: [{colorName: "巧克力色", colorNum: "rgb(210,105,30)"}, {
+                    colorName: "标土棕",
+                    colorNum: "rgb(115,74,18)"
+                }, {colorName: "赭色", colorNum: "rgb(160,82,45)"}, {
+                    colorName: "乌贼墨棕",
+                    colorNum: "rgb(94,38,18)"
+                }, {colorName: "沙棕色", colorNum: "rgb(244,164,96)"}, {
+                    colorName: "栗色",
+                    colorNum: "rgb(125, 0, 0)"
+                }, {colorName: "棕色", colorNum: "rgb(124, 75, 0)"}]
+            }]
+        };
+        var e = Object.assign || function (j) {
+            for (var g = 1; g < arguments.length; g++) {
+                var h = arguments[g];
+                for (var f in h) {
+                    if (Object.prototype.hasOwnProperty.call(h, f)) {
+                        j[f] = h[f]
+                    }
+                }
+            }
+            return j
+        };
+
+        function a() {
+            d = e({}, b, arguments[0]);
+            var f = this;
+            this.index = d.index;
+            this.createElement(function () {
+                f.render()
+            })
+        }
+
+        a.prototype.createElement = function (f) {
+            this.mainbox = document.createElement("div");
+            this.nav = document.createElement("ul");
+            this.box = document.createElement("div");
+            this.colorlist = document.createElement("ul");
+            $(this.mainbox).addClass("color-group-wrapper color-dropdown-wrapper");
+            $(this.nav).addClass("color-group-panel");
+            $(this.box).addClass("colors-panel");
+            $(this.colorlist).addClass("color-list");
+            $(this.box).html('<p class="colors-panel-title"></p>');
+            $(this.box).append(this.colorlist);
+            $(this.mainbox).append(this.nav);
+            $(this.mainbox).append(this.box);
+            f && f()
+        };
+        a.prototype.render = function () {
+            var l = this;
+            var h = $(this.mainbox);
+            var n = $(this.nav);
+            var k = $(this.colorlist);
+            var g = $(d.elem);
+            var f = null;
+            var o = "";
+            var m = "";
+            for (var j = 0; j < d.data.length; j++) {
+                o += '<li class="color-tag3" data-index="' + j + '">' + '<a href="#">' + '<div class="color-block" style="background:' + d.data[j]["colorNum"] + ';"></div>' + "<span>" + d.data[j]["colorName"] + "</span>" + "</a>" + "</li>"
+            }
+            n.html(o);
+            k.html(this.createList());
+            $("body").append(this.mainbox);
+            n.find("li.color-tag3").hover(function (p) {
+                p.stopPropagation();
+                var i = $(this).attr("data-index");
+                if (i == l.index) {
+                    return
+                }
+                l.index = i;
+                k.html(l.createList())
+            });
+            $("body").on("click", ".color-group-panel li.color-tag3", function (i) {
+                i.stopPropagation()
+            });
+            $("body").on("click", ".color-list li.color-tag3", function (q) {
+                q.stopPropagation();
+                var p = $(this).attr("data-index");
+                console.log('p', p);
+                console.log('d.data[l.index]["colorList"]', d.data[l.index]["colorList"])
+                console.log('d', d)
+                var i = d.data[l.index]["colorList"][p]["colorName"];
+                console.log(f)
+                if (f.val() != "") {
+                    c = f.val().split(d.range)
+                } else {
+                    c = []
+                }
+                if (c.indexOf(i) != -1) {
+                    return
+                }
+
+                //给当前加背景
+                // $(this).attr({"background":'#EEEEEE'});
+
+                c.push(i);
+                f.val(c.join(d.range));
+                c.length = 0
+            });
+            h.css({display: "none"});
+            g.off("click").on("click", function (q) {
+                q.stopPropagation();
+                f = $(this);
+                if (f.val() != "") {
+                    c = f.val().split(d.range)
+                }
+                var p = f.offset().left + d.left;
+                var i = f.offset().top + f.get(0).offsetHeight;
+                h.css({position: "absolute", left: p, top: i, display: "block", zIndex: "2999"});
+                $("html").off("click").on("click", function () {
+                    h.hide()
+                })
+            })
+        };
+        a.prototype.createList = function () {
+            var h = "";
+            var f = this.index;
+            var j = d.data[f]["colorList"];
+            for (var g = 0; g < j.length; g++) {
+                h += '<li class="color-tag3" data-index="' + g + '">' + '<a href="#">' + '<div class="color-block" style="background:' + j[g]["colorNum"] + ';"></div>' + "<span>" + j[g]["colorName"] + "</span>" + "</a>" + "</li>"
+            }
+            return h
+        };
+        return a
+    }());
+</script>
+
+<script>
+
+    //初始化关键词jsonobject
+    var keywords = {};
+
+    function renderBtn(title) {
+        return '<button onclick="removeKeyword(\'' + title + '\')" style="background-color: #f7e64c;margin-right: 10px" type="button" class="stage_two_dail btn btn-sm ">' + title + '</button>';
+    }
+
+    function addKeyword() {
+        layer.prompt({title: '请输入关键词名称',}, function (title, index) {
+            layer.close(index);
+            if (keywords[title]) {
+                layer.msg('关键词已存在');
+                return false;
+            }
+            if (Object.keys(keywords).length >= 5) {
+                layer.msg('关键词数量不能大于5个');
+                return false;
+            }
+            layer.prompt({title: '请填写关键词介绍',}, function (content, index) {
+                layer.close(index);
+                keywords[title] = content;
+                $('#keywords_group').append(renderBtn(title))
+                layer.msg('关键词添加成功');
+            });
+        });
+    }
+
+    function removeKeyword(title) {
+        console.log(title);
+        layer.confirm('是否删除关键词:' + title, {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            if (keywords[title]) {
+                delete keywords[title];
+                //refresh btns
+                $('#keywords_group').empty();
+                for (var k in keywords) {
+                    $('#keywords_group').append(renderBtn(k))
+                }
+            }
+            layer.msg('删除成功');
+        }, function () {
+
+        });
+    }
+
+</script>
+<script>
+    var flagArr = []
+
+
+    function randomString(len) {
+        len = len || 32;
+        var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+        /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        var maxPos = $chars.length;
+        var pwd = '';
+        for (var i = 0; i < len; i++) {
+            pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        return pwd;
+    }
+
+
+    function appendAddress() {
+        var base_province = $('#province_id').val()
+        var base_city = $('#city_id').val()
+        if (base_province == '') {
+            layer.msg('请先完善省份信息');
+            return false
+        }
+        if (base_city == '') {
+            layer.msg('请先完善城市信息');
+            return false
+        }
+
+        var flagIdx = randomString(6)
+        flagArr.push(flagIdx)
+
+        //获得市列表
+        // var district_opts = ''
+        // $('#district_id').each(function () {
+        //     var val = $(this).val();
+        //     var text = $(this).text();
+        //     district_opts += '<option value="' + $(this).val() + '">' + $(this).text() + '</option>';
+        // })
+
+
+        var html =
+            `
+
+            <div class="card">
+        <div class="card-header" id="headingTwo">
+            <strong>追加地址</strong>
+        </div>
+
+        <div id="distpicker${flagIdx}" class="card-body" style="padding: 0.5rem;">
+            <div class="row">
+                <?-- Inner Filter -->
+
+
+                <div style="display: none" class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">工作地点.省</span>
+                    </div>
+                    <!--                    <input type="text" class="form-control" name="working_place_province" id="province_id"-->
+                    <!--                           placeholder="省" value=""></input>-->
+                    <select name="working_place_province" class="form-control" id="province_id${flagIdx}"></select>
+                </div>
+
+
+                <div style="display: none" class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3" style="width:84px">*工作地点.市</span>
+                    </div>
+                    <!--                    <input type="text" class="form-control" name="working_place_city" id="city_id" placeholder="市"-->
+                    <!--                           value=""></input>-->
+                    <select name="working_place_city" class="form-control" id="city_id${flagIdx}">
+
+                    </select>
+                </div>
+
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">工作地点.区</span>
+                    </div>
+                    <!--                    <input type="text" class="form-control" name="working_place_district" id="district_id"-->
+                    <!--                           placeholder="区" value=""></input>-->
+                    <select name="working_place_district" class="form-control" id="district_id${flagIdx}"></select>
+
+                </div>
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">工作地点.街道</span>
+                    </div>
+                    <!--                    <input type="text" class="form-control" name="working_place_district" id="district_id"-->
+                    <!--                           placeholder="区" value=""></input>-->
+                    <select name="working_place_street" class="form-control" id="street_id${flagIdx}">
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">工作地点.详细</span>
+                    </div>
+                    <input type="text" class="form-control" name="address_suite" id="address_suite${flagIdx}" placeholder="详细地址"
+                           value=""/>
+                </div>
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">联系人</span>
+                    </div>
+                    <input type="text" class="form-control" name="linkman_name" id="linkman_name${flagIdx}" placeholder=""
+                           value=""></input>
+                </div>
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">电话</span>
+                    </div>
+                    <input type="text" class="form-control" name="linkman_phone" id="linkman_phone${flagIdx}" placeholder=""
+                           value=""></input>
+                </div>
+
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">状态</span>
+                    </div>
+                    <!--                    <input type="text" class="form-control" name="working_place_district" id="district_id"-->
+                    <!--                           placeholder="区" value=""></input>-->
+                    <select name="working_place_street" class="form-control" id="zp_status${flagIdx}">
+                        <option value="招聘中">招聘中</option>
+                        <option value="停招">停招</option>
+                    </select>
+
+                </div>
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">标签</span>
+                    </div>
+                    <input type="text" class="form-control" name="linkman_phone" id="addr_tag${flagIdx}" placeholder=""
+                           value=""></input>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+            `;
+
+        $('#base_apppend').after(html)
+
+        var $distpickera = $('#distpicker' + flagIdx);
+
+
+        $distpickera.distpicker({
+            province: base_province,
+            city: base_city,
+            district: ''
+        });
+
+        $('#district_id' + flagIdx).change(function () {
+            var st = $(this).val();
+            console.log(st)
+            if (st != '') {
+                getStreets('street_id' + flagIdx, st)
+            }
+        })
+
+
+    }
+
+
+</script>
+<script>
+    function ToAppendAddress(base_province, base_city, dis, street, juti, linkman_name, linkman_phone, zp_status,tag) {
+        var flagIdx = randomString(6)
+        flagArr.push(flagIdx)
+
+        //获得市列表
+        // var district_opts = ''
+        // $('#district_id').each(function () {
+        //     var val = $(this).val();
+        //     var text = $(this).text();
+        //     district_opts += '<option value="' + $(this).val() + '">' + $(this).text() + '</option>';
+        // })
+
+
+        var html =
+            `
+
+            <div class="card">
+        <div class="card-header" id="headingTwo">
+            <strong>追加地址</strong>
+        </div>
+
+        <div id="distpicker${flagIdx}" class="card-body" style="padding: 0.5rem;">
+            <div class="row">
+                <?-- Inner Filter -->
+
+
+                <div style="display: none" class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">工作地点.省</span>
+                    </div>
+                    <!--                    <input type="text" class="form-control" name="working_place_province" id="province_id"-->
+                    <!--                           placeholder="省" value=""></input>-->
+                    <select  class="form-control" id="province_id${flagIdx}"></select>
+                </div>
+
+
+                <div style="display: none" class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3" style="width:84px">*工作地点.市</span>
+                    </div>
+                    <!--                    <input type="text" class="form-control" name="working_place_city" id="city_id" placeholder="市"-->
+                    <!--                           value=""></input>-->
+                    <select  class="form-control" id="city_id${flagIdx}">
+
+                    </select>
+                </div>
+
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">工作地点.区</span>
+                    </div>
+                    <!--                    <input type="text" class="form-control" name="working_place_district" id="district_id"-->
+                    <!--                           placeholder="区" value=""></input>-->
+                    <select  class="form-control" id="district_id${flagIdx}"></select>
+
+                </div>
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">工作地点.街道</span>
+                    </div>
+                    <!--                    <input type="text" class="form-control" name="working_place_district" id="district_id"-->
+                    <!--                           placeholder="区" value=""></input>-->
+                    <select class="form-control" id="street_id${flagIdx}">
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">工作地点.详细</span>
+                    </div>
+                    <input type="text" class="form-control" id="address_suite${flagIdx}" placeholder="详细地址"
+                           value="${juti}"/>
+                </div>
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">联系人</span>
+                    </div>
+                    <input type="text" class="form-control" id="linkman_name${flagIdx}" placeholder=""
+                           value="${linkman_name}"></input>
+                </div>
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">电话</span>
+                    </div>
+                    <input type="text" class="form-control" id="linkman_phone${flagIdx}" placeholder=""
+                           value="${linkman_phone}"></input>
+                </div>
+
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">状态</span>
+                    </div>
+                    <!--                    <input type="text" class="form-control" name="working_place_district" id="district_id"-->
+                    <!--                           placeholder="区" value=""></input>-->
+                    <select class="form-control" id="zp_status${flagIdx}">
+                        <option value="招聘中">招聘中</option>
+                        <option value="停招">停招</option>
+                    </select>
+
+                </div>
+
+                <div class="col-md-2 input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">标签</span>
+                    </div>
+                    <input type="text" class="form-control" id="addr_tag${flagIdx}" placeholder=""
+                           value="${tag}"></input>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+           `;
+
+        $('#base_apppend').after(html)
+
+        var $distpickera = $('#distpicker' + flagIdx);
+
+
+        $distpickera.distpicker({
+            province: base_province,
+            city: base_city,
+            district: dis
+        });
+
+
+        // if (street != '') {
+        getStreets('street_id' + flagIdx, dis, function () {
+            $('#street_id' + flagIdx).val(street)
+        })
+        // }
+
+
+        $('#district_id' + flagIdx).change(function () {
+            var st = $(this).val();
+            console.log(st)
+            if (st != '') {
+                getStreets('street_id' + flagIdx, st)
+            }
+        })
+
+        $('#zp_status' + flagIdx).val(zp_status)
+
+
+    }
+
+</script>
+<script>
+
+    var E = window.wangEditor
+
+
+    function makeCollomns() {
+        return [
+            {
+                data: function (e) {
+                    return '<div class="checker"><span class=""><input type="checkbox" class="checksigle" value="' + e.id + '"></span></div>';
+
+                },
+                "sWidth": "3%"
+            },
+        ]
+    }
+
+    $(document).ready(function () {
+        var selected = [];
+        var table = $('#dataTable').DataTable({
+            "processing": true,
+            "serverSide": true,
+
+            "ajax": {
+                "url": "/api/posts/",
+                "type": "GET",
+            },
+            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                $('td:eq(1)', nRow).html(iDisplayIndex + 1);
+                return nRow;
+            },
+            "rowCallback": function (row, data) {
+                if ($.inArray(data.DT_RowId.toString(), selected) !== -1) {
+                    $(row).addClass('selected');
+                }
+            },
+
+            "columns": [
+                {"data": "id"},
+                {"data": "project_name"},
+                {"data": "department.company.name"},
+                {"data": "department.name"},
+                {"data": "name"},
+                {"data": "place"},
+                {"data": "description"},
+                {"data": "link"},
+                {"data": "request"},
+            ],
+        });
+
+        $('#dataTable tbody').on('click', 'tr', function () {
+            var id = this.id;
+            var index = $.inArray(id, selected);
+
+            if (index === -1) {
+                selected.push(id);
+            } else {
+                selected.splice(index, 1);
+            }
+            // alert(1);
+            // $(this).toggleClass('selected');
+        });
+
+        $('#id_b_submit').on('click', function () {
+            console.log(selected);
+            localStorage['post'] = selected[0];
+        });
+        $('#post_button_id').on('click', function () {
+
+            //keywords处理
+            if(!keywords) keywords = {}
+            if (Object.keys(keywords).length > 0) {
+                $('#keywords').val(JSON.stringify(keywords));
+            }
+            postAjaxSubmit()
+            // table.draw()
+        });
+    });
+
+    function postAjaxSubmit() {
+        if (true) {
+            var formData = new FormData($("#post_filter_form")[0]);
+            console.log(formData);
+
+            //操作岗位要求设置
+            var yaoqiu = {
+                'hangyeleibie': ['', ''],
+                'gangweileibie': ['', ''],
+                'gangweijibie': ['', ''],
+                'gangweizuoxi': ['', ''],
+                'shebaogongjijin': ['', ''],
+                'gangweitezheng': ['', ''],
+                'xinzidaiyu': ['', ''],
+            }
+            for (var y in yaoqiu) {
+                console.log(y)
+                var sel0 = $('#' + y + '1').val()
+                console.log(sel0)
+                if (sel0 && sel0 != '') {
+                    var val = $('#' + y + '_val').val()
+                    if (y == 'xinzidaiyu') {
+                        yaoqiu[y][0] = sel0
+                    } else {
+                        if (val && val != '' && !isNaN(parseInt(val))) {
+                            yaoqiu[y][0] = sel0
+                            yaoqiu[y][1] = val
+                        }
+                    }
+
+                }
+            }
+
+            console.log(yaoqiu)
+            console.log('cmimit')
+            formData.append("yaoqiu", JSON.stringify(yaoqiu))
+
+
+            //操作多余地址
+            var extra_address = []
+            var base_prop = [
+                'district_id',
+                'street_id',
+                'address_suite',
+                'linkman_name',
+                'linkman_phone',
+                'zp_status',
+                'addr_tag'
+            ]
+
+            //完善地址信息
+
+
+            if (flagArr.length > 0) {
+
+                formData.append('working_place_district', $('#district_id' + flagArr[0]).val())
+                formData.append('working_place_street', $('#street_id' + flagArr[0]).val())
+                formData.append('address_suite', $('#address_suite' + flagArr[0]).val())
+
+                for (var flag of flagArr) {
+                    var prop = {}
+                    for (var b of base_prop) {
+                        prop[b] = $('#' + b + flag).val()
+                    }
+                    extra_address.push(prop)
+                }
+            }
+            console.log('extra_address', extra_address)
+            formData.append('extra_address', JSON.stringify(extra_address))
+
+            $.ajax({
+                url: '/post/post/update/',
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data == 'success') {
+                        layer.msg("编辑成功");
+                        setTimeout(function () {
+                            table.draw()
+                        },1500)
+                    } else {
+                        layer.msg(data)
+                    }
+                },
+                error: function (data) {
+                }
+            });
+        } else {
+            $.ajax({
+                "url": "/post/post/update/",
+                "type": "POST",
+                "data": $('#post_filter_form').serialize(),
+            });
+        }
+
+    }
+
+    $('#last_modified_time').datepicker({
+        dateFormat: 'yy-mm-dd',
+    });
+
+
+    function getQueryString(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return unescape(r[2]);
+        }
+        return null;
+    }
+
+    console.log('开始加载详情')
+    $.ajax({
+        type: "POST",
+        url: '/api/project_info?id=' + getQueryString('id'),
+        async: false,
+        dataType: "json",
+        success: function (data) {
+            $('#id').val(getQueryString('id'))
+            console.log(data);
+            renderData(data.data[0].fields, data)
+        }
+    });
+
+    //     company: "科勒网络"
+    // department: 11
+    // name: "HR"
+    // project_name: "科勒网络-吉林省四平市伊通满族自治县-人事"
+    // p_type: "人事"
+    // p_feature: ""
+    // p_xingzhi: ""
+    // description: "HR"
+    // level: ""
+    // subsidy: ""
+    // sum_salary: ""
+    // year_yard: ""
+    // social_security: ""
+    // other_benefit: ""
+    // address_province: "吉林省"
+    // address_city: "四平市"
+    // address_district: "伊通满族自治县"
+    // address_street: ""
+    // address_suite: ""
+    // degree: null
+    // degree_min: 0
+    // degree_max: 100
+    // graduatetime_min: 0
+    // graduatetime_max: 2080
+    // age_min: 20
+    // age_max: 55
+    // gender: "不限"
+    // recruit_count: null
+    // salary_offer: "3000"
+    // observe_time: null
+    // interview_location: null
+    // linkman: "jack"
+    // linkman_phone: "18010101010"
+    // talk_hint: "<p>驱蚊器二</p>"
+    // prologue: "<p><br></p>"
+    // workplace: "<p><br></p>"
+    // work_purpose: "<p><br></p>"
+    // wechat_invite: "<p><br></p>"
+    // invite_voice: ""
+    // offer_voice: ""
+    // keywords: ""
+    // finished: 1
+    // reserved1: ""
+    // reserved2: ""
+    // baiying_task_name: "测试百应"
+    // baiying_task_id: 1
+    // baiying_talk_done: null
+    // resume_latest_modified: "1970-01-01T00:00:00Z"
+    // last_modified: "2020-03-24T15:23:34.165Z"
+    // created: "2020-03-24T11:56:15.599Z"
+
+
+    function renderData(res, ohter) {
+        console.log('render：', res)
+        console.log(typeof res)
+        // res = JSON.parse(JSON.stringify(res))
+
+        $('#question').val(res.question || '')
+
+        //渲染多地址
+        if (res.extra_address && res.extra_address != '') {
+            var mflagArr = JSON.parse(res.extra_address)
+            for (var flag of mflagArr) {
+                ToAppendAddress(res.address_province, res.address_city,
+                    flag.district_id, flag.street_id, flag.address_suite,
+                    flag.linkman_name, flag.linkman_phone, flag.zp_status,flag.addr_tag || '')
+            }
+        }
+
+            var editorList = [
+            'talk_hint',
+            'prologue',
+            'workplace',
+            'work_purpose',
+            'wechat_invite',
+            'yaoyuemuban',
+            'mianshimuban',
+            'offermuban'
+        ];
+
+        for (let i = 0; i < editorList.length; i++) {
+            (function (id) {
+                var editor = new E('#' + id + '_editor')
+                var $text1 = $('#' + id)
+                editor.customConfig.onchange = function (html) {
+                    // 监控变化，同步更新到 textarea
+                    $text1.val(html)
+                }
+                editor.create()
+                // 初始化 textarea 的值
+                editor.txt.html(res[editorList[i]] || '')
+                $text1.val(res[editorList[i]] || '')
+            })(editorList[i]);
+        }
+
+
+        //设置biaying
+        var bytask_id = '-' + res.baiying_task_id + ''
+        var baiyibng_valye = ''
+
+        $.ajax({
+            type: "GET",
+            url: '/interview/ai/task',
+            async: false,
+            dataType: "json",
+            success: function (data) {
+                $('#baiying_task_id').html("")
+                $('#baiying_task_id').prepend('<option value="">请选择任务</option>');
+                if (data != '') {
+                    $.each(data.ai_taskId, function (index, ele) {
+                        if(ele[0].endsWith(bytask_id)){
+                            baiyibng_valye = ele[0]
+                        }
+                        $('#baiying_task_id').append('<option value=' + ele[0] + '>' + ele[1] + '</option>');
+                    });
+                    $('#baiying_task_id').val(baiyibng_valye)
+                }
+            }
+        });
+
+        $('#distpicker').distpicker("destroy")
+        $('#distpicker').distpicker({
+            province: res.address_province,
+            city: res.address_city,
+            district: res.address_district
+        });
+
+        //做初始化处理
+        if (res.address_district != '') {
+            getStreets('street_id', res.address_district, function () {
+                $('#street_id').val(res.address_street)
+            })
+        }
+
+        //手动设置具体地址
+        $('#address_suite').val(res.address_suite || '')
+
+
+        //先设置省市县
+        // $('#province_id').val(res.address_province);
+        // $('#city_id').val(res.address_city);
+        // $('#district_id').val(res.address_district);
+
+        $('#company_id').val(res.company);
+        $('#department_id').val(res.department);
+        $('#post_id').val(res.description);
+        $('#post_type_id').val(res.p_type);
+
+
+        var degreeMap = {
+            1: "小学",
+            2: "初中",
+            3: "高中",
+            4: "中专",
+            5: "大专",
+            6: "本科",
+            7: "硕士",
+            8: "博士",
+            9: "博士后",
+        }
+
+        $('#degree_id_min').val(degreeMap[res.degree_min]);
+        $('#degree_id_max').val(degreeMap[res.degree_max]);
+        $('#age_id_min').val(res.age_min);
+        $('#age_id_max').val(res.age_max);
+        $('#graduate_time_start').val(res.graduatetime_min);
+        $('#graduate_time_end').val(res.graduatetime_max);
+        $('#gender_id').val(res.gender);
+
+        $("#last_modified_time").datepicker('setDate', new Date(res.resume_latest_modified));
+        // $('#last_modified_time').val(res.resume_latest_modified);
+        $('#min_salary_id').val(res.salary_offer);
+        $('#linkman_name').val(res.linkman);
+        $('#linkman_phone').val(res.linkman_phone);
+
+
+        console.log('开始加载新字段')
+
+        //开始加载新字段
+        $('#hangyeleibie').val(ohter.hangyeleibie)
+        $('#gangweileibie').val(ohter.gangweileibie)
+        // $('#gangweijibie').val(ohter.gangweijibie)
+        // $('#gangweizuoxi').val(ohter.gangweizuoxi)
+        // $('#shebaogongjijin').val(ohter.shebaogongjijin)
+        // $('#gangweitezheng').val(ohter.gangweitezheng)
+        $('#xinzidaiyu').val(ohter.xinzidaiyu)
+
+
+        var yaoqiu_json = {}
+        if (res.yaoqiu && res.yaoqiu != '') {
+            yaoqiu_json = JSON.parse(res.yaoqiu)
+            $('#hangyeleibie1').val(yaoqiu_json.hangyeleibie[0])
+            $('#hangyeleibie_val').val(yaoqiu_json.hangyeleibie[1])
+            $('#gangweileibie1').val(yaoqiu_json.gangweileibie[0])
+            $('#gangweileibie_val').val(yaoqiu_json.gangweileibie[1])
+            $('#xinzidaiyu1').val(yaoqiu_json.xinzidaiyu[0])
+
+        }
+
+        function loadjson(col) {
+            if (yaoqiu_json[col]) {
+                $('#' + col + '1').val(yaoqiu_json[col][0]);
+                if (col != 'xinzidaiyu') {
+                    $('#' + col + '_val').val(yaoqiu_json[col][1])
+                }
+
+            } else {
+                $('#' + col + '1').val('');
+                if (col != 'xinzidaiyu') {
+                    $('#' + col + '_val').val('');
+                }
+
+            }
+        }
+
+        xhr_common_send('GET', '/api/labellibslist/?kind=gangweitezheng', {}, function (data) {
+            var d = [];
+            for (let da of data.results) {
+                d.push({
+                    id: da.id, text: da.name
+                })
+            }
+            $("#gangweitezheng").combox({
+                id: "id",
+                name: "text",
+                data: d,
+                valueChange: function (data) {
+                    //返回data，filterData，selectData
+                }
+            })
+
+            $('#gangweitezheng').val(ohter.gangweitezheng)
+
+            $("#gangweitezheng1").combox({
+                id: "id",
+                name: "text",
+                data: d,
+                valueChange: function (data) {
+                    //返回data，filterData，selectData
+                }
+            })
+
+            loadjson('gangweitezheng')
+        })
+
+        xhr_common_send('GET', '/api/labellibslist/?kind=gangweijibie', {}, function (data) {
+            var html = `<option value=""></option>`;
+            for (let da of data.results) {
+                html += `<option value="${da.id}">${da.name}</option>`
+            }
+            $("#gangweijibie").append(html);
+            $('#gangweijibie').val(ohter.gangweijibie)
+
+
+            $("#gangweijibie1").append(html);
+            loadjson('gangweijibie')
+
+        })
+
+        xhr_common_send('GET', '/api/labellibslist/?kind=gangweizuoxi', {}, function (data) {
+            var html = `<option value=""></option>`;
+            for (let da of data.results) {
+                html += `<option value="${da.id}">${da.name}</option>`
+            }
+            $("#gangweizuoxi").append(html);
+                    $('#gangweizuoxi').val(ohter.gangweizuoxi)
+            $("#gangweizuoxi1").append(html);
+            loadjson('gangweizuoxi')
+
+
+        })
+        xhr_common_send('GET', '/api/labellibslist/?kind=shebaogongjijin', {}, function (data) {
+            var html = `<option value=""></option>`;
+
+            for (let da of data.results) {
+                html += `<option value="${da.id}">${da.name}</option>`
+            }
+            $("#shebaogongjijin").append(html);
+                    $('#shebaogongjijin').val(ohter.shebaogongjijin)
+            $("#shebaogongjijin1").append(html);
+            loadjson('shebaogongjijin')
+
+
+        })
+
+        keywords = JSON.parse(res.keywords);
+        for (var k in keywords) {
+            $('#keywords_group').append(renderBtn(k))
+        }
+
+
+
+        $('#invite_voice').val(res.invite_voice);
+        $('#offer_voice').val(res.offer_voice);
+
+
+    }
+
+
+    function getStreets(id, keyword, fn) {
+
+        console.log('req..')
+        $.ajax({
+            type: "GET",
+            url: 'http://district.market.alicloudapi.com/v3/config/district',
+            // dataType: "jsonp",
+            // jsonp: "callback",
+            headers: {'Authorization': "APPCODE " + 'ba0b5b1ecfd24a6eaa8c1234de7978b3'},
+            data: {
+                // "callback": "callback",
+                "extensions": "base",
+                 "filter": keyword == '宝山区' ? "310113":"",
+                "offset": "20",
+                "output": "JSON",
+                "page": "1",
+                "showbiz": "true",
+                "subdistrict": "3",
+                "keywords": keyword
+            },
+            success: function (data) {
+                var strs = [];
+                if (data.status != "1") {
+                    alert('高德地图请求失败,请检查网络');
+                    return false;
+                }
+                if (data.districts.length == 0) return strs;
+                var strs = [];
+                for (var s in data.districts[0].districts) {
+                    strs.push(data.districts[0].districts[s].name);
+                }
+                console.log(strs);
+                $('#' + id).empty();
+                for (var str of strs) {
+                    var h = `<option value="${str}">${str}</option>`;
+                    $('#' + id).append(h);
+                }
+                fn()
+            }
+            ,
+            error: function (err) {
+                console.log('err', err)
+            }
+        })
+    }
+
+
+    $(function () {
+        $('#district_id').change(function () {
+            var st = $(this).val();
+            console.log(st)
+            if (st != '') {
+                getStreets('street_id', st)
+            }
+        })
+    })
+
+    //TODO:把编辑的做好，再做2，3，4
+
+
+</script>
+<script>
+    xhr_common_send('GET', '/api/labellibslist/?kind=hangyeleibie', {}, function (data) {
+        var process = {}
+        for (var da of data.results) {
+            var prop = {
+                colorName: da.name,
+                colorNum: "",
+                colorList: []
+            }
+            if (da.parent === 0) {
+                process[da.id] = prop
+            } else {
+                if (process[da.parent]) {
+                    delete prop.colorList
+                    process[da.parent].colorList.push(prop)
+                }
+            }
+
+        }
+        console.log(process)
+
+        new SelectColor({
+            elem: ".select-hangye",
+            range: "|",
+            data: Object.values(process)
+        })
+        new SelectColo2({
+            elem: "#hangyeleibie1",
+            range: "|",
+            data: Object.values(Object.assign({}, process))
+        })
+        ;
+    })
+
+    xhr_common_send('GET', '/api/labellibslist/?kind=gangweileibie', {}, function (data) {
+        var process = {}
+        for (var da of data.results) {
+            var prop = {
+                colorName: da.name,
+                colorNum: "",
+                colorList: []
+            }
+            if (da.parent === 0) {
+                process[da.id] = prop
+            } else {
+                if (process[da.parent]) {
+                    delete prop.colorList
+                    process[da.parent].colorList.push(prop)
+                }
+            }
+
+        }
+
+
+            new SelectColor1({
+                elem: ".select-gangwei",
+                range: "|",
+                data: Object.values(process)
+            })
+
+        new SelectColor3({
+            elem: ".select-gangwei1",
+            range: "|",
+            data: Object.values(process)
+        })
+
+    })
+</script>
+
+{% endblock%}

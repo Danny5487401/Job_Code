@@ -1,0 +1,169 @@
+
+  <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Your Website 2020</span>
+          </div>
+        </div>
+      </footer> 
+      <!-- End of Footer -->
+     <!-- <link rel="stylesheet" href="/static/recruit_manager/css/layui_font.css">
+      <link rel="stylesheet" href="/static/recruit_manager/css/layui.css">
+         <script src="/static/recruit_manager/js/layui/layui.js"></script>-->
+      <!-- Bootstrap core JavaScript
+<script src="/static/recruit_manager/vendor/jquery/jquery.min.js"></script>
+<script src="/static/recruit_manager/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+-->
+<!-- Core plugin JavaScript
+<script src="/static/recruit_manager/vendor/jquery-easing/jquery.easing.min.js"></script>
+-->
+      <script type="text/javascript">
+     
+             //   var tel_name = $('#tel_name').val();
+             //   var tel_password = $('#tel_password').val(); 
+                var cache_username = localStorage.getItem("cache_username");
+                var cache_password = localStorage.getItem("cache_password");
+                var tel_name  = cache_username || '';
+                var tel_password  = cache_password || '';
+              //  var tel_name,tel_password;
+                var time;
+                var websocket2 = null;
+          
+                  //判断当前浏览器是否支持WebSocket
+                  if ('WebSocket' in window) {
+                    websocket2 = new WebSocket("ws://120.79.141.14:17115/yuntel");
+                  } else {
+                    alert('当前浏览器不支持拨号，请换浏览器后再试')
+                  }
+          
+                  //连接发生错误的回调方法
+                  websocket2.onerror = function () {
+                    setMessageInnerHTML("WebSocket连接发生错误");
+                  };
+          
+                  //连接成功建立的回调方法
+                  websocket2.onopen = function () {
+                    setMessageInnerHTML("WebSocket连接成功");
+                    //login
+                    send({"messageType": "clientLoginIn", "data": {"username": tel_name, "password": tel_password}})
+                    timer = setInterval(HeartBeatCheck, 10000);
+                  }
+          
+                  //接收到消息的回调方法
+                  websocket2.onmessage = function (event) {
+                    console.log('接收到消息');
+                    setMessageInnerHTML(event.data);
+                    var data = JSON.parse(event.data);
+                    console.log('data:', data)
+                    switch (data.messageType) {
+                      case "clientLoginIn":
+                        if (data.errcode != 0) {
+                          layer.msg(data.errmsg);
+                          tel_name=prompt("请输入拨号软件账号");             
+                          localStorage.setItem("cache_username",tel_name);
+                          tel_password=prompt("请输入拨号软件密码"); 
+                          localStorage.setItem("cache_password",tel_password);
+                          send({"messageType": "clientLoginIn", "data": {"username": tel_name, "password": tel_password}})
+                     return false;
+                        }else {
+                          layer.msg('登录成功')
+                        }
+          
+                        //直接拨号
+                        //console.log('拨号中');
+                        //send({"messageType": "phoneSendSms", "data": {"phone": pn,"text":dx,"smsid":"xxxxxsssszzzzrrrr"}})
+                        //layer.msg('发送成功')
+                        break;
+                      case "phoneCall":
+                      layer.msg('收到拨打电话回复消息')
+                        break;
+ 
+                      case "phoneSendSms":
+                      layer.msg('收到发送短信回复消息')           
+                         break;
+                        
+                      case "phoneInfo":
+
+                         break;
+                      case "phoneCallLog":
+                      submitInterviewPhoneCallLog2(data)
+                      layer.msg('收到电话日志消息')           
+                         break;                        
+                      default:
+          
+          
+                    }
+          
+                  }
+          
+                  //连接关闭的回调方法
+                  websocket2.onclose = function () {
+                    setMessageInnerHTML("WebSocket连接关闭");
+                    clearInterval(timer);
+                  }
+          
+                  //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+                  window.onbeforeunload = function () {
+                    closeWebSocket();
+                  }
+          
+                  //将消息显示在网页上
+                  function setMessageInnerHTML(innerHTML) {
+                    console.log(innerHTML)
+                  }
+          
+                  //关闭WebSocket连接
+                  function closeWebSocket() {
+                    websocket2.close();
+                  }
+          
+                  //发送消息
+                  function send(message) {
+                    websocket2.send(JSON.stringify(message));
+                  }
+  
+                  function HeartBeatCheck(){
+                   // localStorage.setItem("filter_status_value2", filter_status_value);
+                    send({"messageType":"clientPing"})
+                     }      
+                 function submitInterviewPhoneCallLog() {        
+                      var data1 = {
+                                    "interview_status": filter_status_value,                                   
+                                    "interview_id": interview_selected_value,  
+                                    "post_id": post_selected_value,                                   
+                                    "resume_id": resume_selected_value,      
+                                   };
+                                   console.log(data1)
+                    // xhr_common_send("POST","/api/interviewsubphonecalllog/", data1);
+                   } 
+                   
+                   function submitInterviewPhoneCallLog2(data) {        
+                      var data1 = {
+                                    "callid": data.data.callid,
+                                    "user_id": data.data.user_id,
+                                    "phone": data.data.phone,
+                                    "name": data.data.name,
+                                    "localphone": data.data.localphone,
+                                    "result_type": data.data.type,
+                                    "status": data.data.status,
+                                    "createtime": data.data.createtime,
+                                    "duration": data.data.duration,   
+                                    
+                                    "mark": data.data.mark,
+                                    "classify": data.data.classify,
+                                    "filepath": data.data.filepath,
+                                    "company": data.data.company,
+                                    "ringduration": data.data.ringduration,
+                                    "to_phone": data.ToPhone,
+                                    "interview_status": filter_status_value,                                   
+                                    "interview_id": interview_selected_value,  
+                                    "post_id": post_selected_value,                                   
+                                    "resume_id": resume_selected_value,                                      
+                                   };
+                     xhr_common_send("POST","/api/interviewsubphonecalllog/", data1);
+                   }
+                     
+          </script>
+
+   

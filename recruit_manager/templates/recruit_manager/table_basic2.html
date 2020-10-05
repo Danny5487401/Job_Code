@@ -1,0 +1,151 @@
+{% load static %}
+{% include 'recruit_manager/table_header.html' %}
+<body>
+
+<div class="sidebar2s">
+  <div class="sidebar2 right"> 项目权限设置
+    {% include "recruit_manager/perm.html" %}
+  </div>
+</div>
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column" >
+
+  <div class="row" >
+	<div class="col-md-6">
+
+	<div class="row" >	
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-11">
+    <div class="btn-group btn-breadcrumb" >
+       <a href="#" class="btn btn-default"><i class="fas fa-home"></i></a>
+       <a href="{% url 'app_manager:t_index' %}" class="btn btn-default">管理员首页</a>
+       <a href={% url 'app_manager:t_multi' %} class="btn btn-default">项目管理</a>
+       <span class="btn btn-default" id="projSelectorBtn">选择项目</span>
+       {% if UserType == "Manager" %}
+       <span class="btn btn-default" id="projPermissionBtn">项目权限管理</span>
+       {% endif %}
+        <a style="float: right;" href="javascript:showOPLogs()" class="btn btn-default">状态日志</a>
+     </div>
+     </div>
+     </div>
+
+     </div>
+  </div> <?-- **** -->
+
+
+  <!-- Main Content -->
+  <div id="content">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3" style="display:none;">
+        <h6 class="m-0 font-weight-bold text-primary">Details</h6>
+      </div>
+      <div class="card-body">
+        {% block content %} {% endblock %}
+      </div>
+    </div>
+  </div>  <!-- content -->
+  {% include 'recruit_manager/basic_footer.html' %}
+
+  </div><!-- End of Content Wrapper -->
+
+  </div><!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  {% include 'recruit_manager/basic_logout.html' %}
+
+  {% include 'recruit_manager/basic_js.html' %}
+
+  <!-- Page level plugins -->
+  <script src="{% static 'recruit_manager/js/datatables.min.js' %}"></script>
+  <script src="{% static 'recruit_manager/js/scrolling.js' %}"></script>
+  <script src="{% static 'recruit_manager/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+  <script src="{% static 'recruit_manager/vendor/datatables/dataTables.checkboxes.min.js' %}"></script>
+  <script src="{% static 'recruit_manager/js/bootstrap-datetimepicker.js' %}"></script>
+  <script src="{% static 'recruit_manager/js/bootstrap-datetimepicker.fr.js' %}"></script>
+  <script src="{% static 'recruit_manager/js/bootstrap-select.min.js' %}"></script>
+
+  <!-- Page level custom scripts -->
+  {% block extra_js %} {% endblock %}
+</body>
+
+<script>
+
+    Date.prototype.format = function (format) {
+        var o = {
+            "M+": this.getMonth() + 1, //month
+            "d+": this.getDate(),    //day
+            "h+": this.getHours(),   //hour
+            "m+": this.getMinutes(), //minute
+            "s+": this.getSeconds(), //second
+            "q+": Math.floor((this.getMonth() + 3) / 3),  //quarter
+            "S": this.getMilliseconds() //millisecond
+        }
+        if (/(y+)/.test(format)) format = format.replace(RegExp.$1,
+            (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o) if (new RegExp("(" + k + ")").test(format))
+            format = format.replace(RegExp.$1,
+                RegExp.$1.length == 1 ? o[k] :
+                    ("00" + o[k]).substr(("" + o[k]).length));
+        return format;
+    }
+
+
+    function showOPLogs() {
+        var logs = ''
+
+        $.ajax({
+            // Keep the standard restful API here
+            url: '/api/msgbox',
+            type: 'GET',
+            data: null,
+            success: function (response) {
+                console.log(response)
+// resume_username: "陈批量"
+// created: "2020-04-06T05:09:37.896Z"
+// val: ""
+                for (var r of response) {
+                    var date = new Date(r.created).format('yyyy-MM-dd hh:mm:ss');
+                    var h = `
+                <li class="layui-timeline-item">
+            <i class="layui-icon layui-timeline-axis"></i>
+            <div class="layui-timeline-content layui-text">
+                <div class="layui-timeline-title">${date},【${r.resume_username}】简历修改为不找工作.</div>
+            </div>
+        </li>
+                `
+                    logs += h
+                }
+
+                var html = `<div style="margin-left: 15%" id="oplogs">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>操作历史</legend>
+    </fieldset>
+    <ul id="logs" class="layui-timeline">
+        ${logs}
+    </ul>
+</div>`
+        layer.open({
+            type: 1,
+            area: ['700px', '450px'],
+            fixed: false, //不固定
+            maxmin: true,
+            content: html
+        });
+
+
+            }
+        });
+
+
+    }
+</script>
+</html>

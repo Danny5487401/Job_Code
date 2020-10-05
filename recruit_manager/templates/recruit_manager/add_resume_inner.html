@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+{% load static %}
+<html class="x-admin-sm">
+<head>
+    {% include 'recruit_manager/userInfoHeader.html' %}
+
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15" id="resumeInfo" resumeId={{resumeId}} projectId={{projectId}}
+             interviewId={{interviewId}}>
+            <div class="layui-col-md4" style="height:600px;overflow-y:auto" >
+
+<div class="layui-card">
+    <div class="layui-card-header" id="userBasicHeader">
+      <div class="layui-col-sm10">基本信息</div>
+      <div class="layui-col-sm2">
+          <!--      <button class="layui-btn layui-btn-xs" id="userBasicEditButton" hidden>编辑</button>-->
+      </div>
+      <div class="layui-col-sm2">
+          <button class="layui-btn layui-btn-xs" id="userBasicSaveButton" style="display:inline;">保存</button>
+      </div>
+    </div>
+  
+      <div class="layui-card-body layui-row layui-col-space10" id="userBasicShowPanel" hidden>
+      <div class="layui-col-sm9">
+        <div class="layui-form-item" id="userBasicShowName">
+          <h4> {{ resume.username }} </h4>
+        </div>
+        <div class="layui-form-item">
+            <h5 class="layui-col-sm1" id="userBasicShowGendor">
+              {% if resume.gendor == 'm' %}
+                男
+              {% elif resume.gendor == 'f' %}
+                女
+              {% else %}
+                未知
+              {% endif %}
+            </h5>
+          <h5 class="layui-col-sm1" id="userBasicShowAge">{{resume.age}}</h5>
+          <h5 class="layui-col-sm2" id="userBasicShowDegree"></h5>
+          <h5 class="layui-col-sm3" id="userBasicShowGraduate">{{resume.graduate}}</h5>
+          <h6 class="layui-col-sm4" id="userBasicShowPhone">电话:</h6>
+        </div>
+        <div class="layui-form-item">
+          <h6 class="layui-col-sm12" id="userBasicShowCurResidence">现居住地：</h6>
+          <h6 class="layui-col-sm12" id="userBasicShowBirthPlace">籍贯:</h6>
+  <!--        <h6 class="layui-col-sm12" id="userBasicShowExpectPlace">期望工作地:</h6>-->
+        </div>
+      </div>
+    </div>
+  
+      <div class="layui-card-body layui-row layui-col-space10" id="userBasicEditPanel">
+      <div class="layui-col-sm9">
+        <div class="layui-form-item">
+          <input type="text" id="userBasicEditName" name="username" placeholder="姓名" autocomplete="off" class="layui-input">
+          <h5 class="layui-col-sm2">
+              <!--          <input type="text" id="userBasicEditGendor" name="gender" placeholder="性别" autocomplete="off" class="layui-input layui-from-checked">-->
+              <select class="layui-select" id="userBasicEditGendor">
+                  <option value="男">男</option>
+                  <option value="女">女</option>
+              </select>
+          </h5>
+          <h5 class="layui-col-sm3">
+              <!--          <input type="text" id="userBasicEditAge" name="age" placeholder="年龄" autocomplete="off" class="layui-input">-->
+              <select class="layui-select" id="userBasicEditAge">
+  
+              </select>
+          </h5>
+          <h5 class="layui-col-sm3">
+              <!--          <input type="text" id="userBasicEditDegree" name="degree" placeholder="学历" autocomplete="off" class="layui-input">-->
+              <select class="layui-select" id="userBasicEditDegree" name="degree">
+                  <option value=""></option>
+                  <option value="小学">小学</option>
+                  <option value="初中">初中</option>
+                  <option value="高中">高中</option>
+                  <option value="中专">中专</option>
+                  <option value="大专">大专</option>
+                  <option value="本科">本科</option>
+                  <option value="硕士">硕士</option>
+                  <option value="博士">博士</option>
+                  <option value="博士后">博士后</option>
+              </select>
+          </h5>
+          <h5 class="layui-col-sm3">
+            <!--          <input class="layui-input" autocomplete="off" placeholder="毕业时间" id="userBasicEditGraduate">-->
+            <select class="layui-select" id="userBasicEditGraduate">
+            </select>
+          </h5>
+  
+          <h6 class="layui-col-sm12">电话号码：
+              <input type="text" id="userBasicEditPhone" class="layui-input" name="phone_number">
+          </h6>
+  
+          <!-- 换成三个联动框体 -->
+          <h6 class="layui-col-sm12">籍贯:
+          </h6>
+          <div id="distpicker">
+            <h5 class="layui-col-sm3">
+              <select style="width: 63.98px" class="layui-select" name="birth_province"
+                      id="userBasicEditBirthProvince"></select>
+              <!--          <input type="text" id="userBasicEditBirthProvince" name="birth_province" placeholder="省" autocomplete="off" class="layui-input layui-from-checked">-->
+            </h5>
+            <h5 class="layui-col-sm3">
+              <select style="width: 63.98px" class="layui-select" name="birth_city" id="userBasicEditBirthCity"></select>
+              <!--          <input type="text" id="userBasicEditBirthCity" name="birth_city" placeholder="市" autocomplete="off" class="layui-input layui-from-checked">-->
+            </h5>
+            <h5 class="layui-col-sm3">
+              <select style="width: 63.98px" class="layui-select" name="birth_district"
+                      id="userBasicEditBirthDistrict"></select>
+  
+              <!--          <input type="text" id="userBasicEditBirthDistrict" name="birth_district" placeholder="区" autocomplete="off" class="layui-input layui-from-checked">-->
+            </h5>
+          </div>
+  
+          <h5 class="layui-col-sm3">
+            <input type="text" id="userBasicEditBirthStreet" name="birth_street" placeholder="街道" autocomplete="off" class="layui-input layui-from-checked">
+          </h5>
+  
+        <h6 class="layui-col-sm12">居住状况：
+            <input type="text" id="userBasicEditLiveState" class="layui-input" name="live_state">
+        </h6>
+  
+   <!--        <h6 class="layui-col-sm12">现居住地：
+         </h6>
+  
+         <div id="distpicker1">
+  
+            <h5 class="layui-col-sm3">
+              <select style="width: 63.98px" class="layui-select" name="current_settle_province"
+                      id="userBasicEditCurSettleProvince"></select>-->
+  <!--            &lt;!&ndash;          <input type="text" id="userBasicEditCurSettleProvince" name="current_settle_province" placeholder="省" autocomplete="off" class="layui-input layui-from-checked">&ndash;&gt;-->
+   <!--         </h5>
+            <h5 class="layui-col-sm3">
+              <select style="width: 63.98px" class="layui-select" name="current_settle_city"
+                      id="userBasicEditCurSettleCity"></select>-->
+  <!--            &lt;!&ndash;          <input type="text" id="userBasicEditCurSettleCity" name="current_settle_city" placeholder="市" autocomplete="off" class="layui-input layui-from-checked">&ndash;&gt;-->
+   <!--          </h5>
+            <h5 class="layui-col-sm3">
+              <select style="width: 63.98px" class="layui-select" name="current_settle_district"
+                      id="userBasicEditCurSettleDistrict"></select>-->
+  <!--            &lt;!&ndash;          <input type="text" id="userBasicEditCurSettleDistrict" name="current_settle_district" placeholder="区" autocomplete="off" class="layui-input layui-from-checked">&ndash;&gt;-->
+   <!--          </h5>
+  
+          </div>
+  
+   
+          <h5 class="layui-col-sm3">
+            <input type="text" id="userBasicEditCurSettleStreet" name="current_settle_street" placeholder="街道" autocomplete="off" class="layui-input layui-from-checked">
+          </h5>-->
+  <!-- 
+  
+          <h6 class="layui-col-sm12">期望工作地：
+          </h6>
+  
+          <div id="distpicker2">
+  
+            <h5 class="layui-col-sm3">
+              <select style="width: 63.98px" class="layui-select" name="expected_province"
+                      id="userBasicEditExpectProvince"></select>-->
+              <!--          <input type="text" id="userBasicEditExpectProvince" name="expected_province" placeholder="省" autocomplete="off" class="layui-input layui-from-checked">-->
+   <!--         </h5>
+            <h5 class="layui-col-sm3">
+              <select style="width: 63.98px" class="layui-select" name="expected_city"
+                      id="userBasicEditExpectCity"></select>-->
+              <!--          <input type="text" id="userBasicEditExpectCity" name="expected_city" placeholder="市" autocomplete="off" class="layui-input layui-from-checked">-->
+   <!--          </h5>
+            <h5 class="layui-col-sm3">
+              <select style="width: 63.98px" class="layui-select" name="expected_district"
+                      id="userBasicEditExpectDistrict"></select>-->
+              <!--          <input type="text" id="userBasicEditExpectDistrict" name="expected_district" placeholder="区" autocomplete="off" class="layui-input layui-from-checked">-->
+  <!--           </h5>
+  
+          </div>
+          <h5 class="layui-col-sm3">
+            <input type="text" id="userBasicEditExpectStreet" name="expected_place" placeholder="街道" autocomplete="off" class="layui-input layui-from-checked">
+          </h5>
+        -->
+        </div>
+      </div>
+    </div>
+  
+</div>
+</div>
+</div>
+
+
+  </div>
+  
+  <script>
+    var $distpicker = $('#distpicker');
+    var $distpicker1 = $('#distpicker1');
+    var $distpicker2 = $('#distpicker2');
+  
+  
+  
+  
+  
+    // $distpicker.distpicker({
+    //   province: '---- 所在省 ----',
+    //   city: '---- 所在市 ----',
+    //   district: '---- 所在区 ----'
+    // });
+    //
+    // $distpicker1.distpicker({
+    //    province: '---- 所在省 ----',
+    //   city: '---- 所在市 ----',
+    //   district: '---- 所在区 ----'
+    // });
+  
+    // $distpicker2.distpicker({
+    //  province: '---- 所在省 ----',
+    //   city: '---- 所在市 ----',
+    //   district: '---- 所在区 ----'
+    // });
+  </script>
+  <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+  <script src="{% static 'recruit_manager/js/callInterview/basic_op.js' %}"></script>
+  <script type="text/javascript">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  </script>
+  </body>
+  </html>

@@ -1,0 +1,134 @@
+  <div style="z-index: 99999999999999" class="modal fade" tabindex="-1" id="dailToCandidateModal" role="dialog" aria-labelledby="callInterviewPanel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title">项目VS候选人</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+
+          <?--------------------------------------------------------------->
+          <div class="tab-content" id="myTabContent">
+            <div class="container">
+            <div class="row">
+            <div class="col-4" id="post" role="tabpanel" aria-labelledby="post-tab">
+              <h6 style="color:#e1a523;">个人基本信息</h6>
+              <form>
+                <div class="form-group"><input type="text" class="form-control" id="candidate_text_resumeinfo_username" placeholder="姓名"></div>
+                <div class="form-group"><input type="text" class="form-control" id="candidate_text_resumeinfo_degree" placeholder="学历"></div>
+                <div class="form-group"><input type="text" class="form-control" id="candidate_text_resumeinfo_school" placeholder="学校"></div>
+                <div class="form-group"><input type="text" class="form-control" id="candidate_text_resumeinfo_phone_number" placeholder="电话"></div>
+              </form>
+              <h6 style="color:#e1a523;">企业基本信息</h6> 
+              <form>
+                <div class="form-group"><input type="text" class="form-control" id="text_postinfo_company" placeholder="公司名"></div>
+                <div class="form-group"><input type="text" class="form-control" id="text_postinfo_department" placeholder="部门名"></div>
+                <div class="form-group"><input type="text" class="form-control" id="text_postinfo_post" placeholder="岗位名称"></div>
+                <div class="form-group"><input type="text" class="form-control" id="text_postinfo_description" placeholder="岗位简介"></div>
+              </form>
+            </div> <?--- the left part-->
+            <div class="col-4">
+              <h6 style="color:#5323e1;">沟通思路</h6> 
+                  <textarea class="form-control" id="dail_text_terminate_expected_notes" style="height:400px;"></textarea>
+            </div>
+            <div class="col-4">
+
+              <form>
+                <?----item1--->
+                <div>
+                <label for="dail_text_cur_hunting_status">当前找工作状态</label>
+                <select id="dail_text_cur_hunting_status">
+                    <option value=-1></option>
+                  <option value=1>在职,不找工作</option>
+                    <option value=2>在职,考虑新机会</option>
+                  <option value=3>离职,正在找工作</option>
+                </select>
+                </div>
+
+                <?-----item2---->
+                <div>
+                  <label for="dail_text_expected_industry">选择期望行业</label>
+                  <select id="dail_text_expected_industry">
+                    <option></option><option>计算机软件</option><option>通信</option>
+                    <option>建筑</option><option>房地产</option><option>家居装修</option>
+                  </select>
+                </div>
+
+                <?-----item3---->
+                <div>
+                  <label for="dail_text_expected_post">选择期望岗位</label>
+                  <select id="dail_text_expected_post">
+                    <option></option><option>普通员工</option><option>项目经理</option><option>总监</option>
+                  </select>
+                </div>
+
+                <?------item4------>
+                <div>
+                  <label for="dail_text_expected_shift" >期望作息时间</label>
+                  <select id="dail_text_expected_shift">
+                    <option></option><option>做五休二</option><option>单双休</option><option>单休</option><option>无休</option>
+                  </select>
+                </div>
+
+                <?-------item5----->
+                <div> 
+                  <label for="dail_text_expected_salary" class="col-form-label">期望薪水(元/月)</label>
+                  <textarea class="form-control" id="dail_text_expected_salary"></textarea>
+                </div>
+                <div>
+                  <label for="dail_text_expected_other" class="col-form-label">其他说明</label>
+                  <textarea class="form-control" id="dail_text_terminate_expected_notes"></textarea>
+                </div>
+                <div>
+                  <label for="dail_text_expected_place_province">期望工作地.省</label>
+                  <input type="text" name="text_expected_place_province" id="dail_text_expected_place_province" value="">
+                </div>
+                <div>
+                  <label for="dail_text_expected_place_city" >期望工作地.市</label>
+                  <input type="text" name="text_expected_place_city" id="dail_text_expected_place_city" value="">
+                </div>
+                <div>
+                  <label for="dail_text_expected_place_district">期望工作地.区/县</label>
+                  <input type="text" name="text_expected_place_district" id="dail_text_expected_place_district" value="">
+                </div>
+                <div>
+                  <label for="dail_text_expected_place_street">期望工作地.街道</label>
+                  <input type="text" name="text_expected_place_street" id="dail_text_expected_place_street" value="">
+                </div>
+                <div>
+                  <label for="dail_text_expected_insurance">期望社保购买地</label>
+                  <select id="dail_text_expected_insurance">
+                    <option></option><option>本地最低</option><option>本地实缴</option><option>外地最低</option>
+                    <option>外地实缴</option><option>不购买</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="dail_text_expected_insurance_schedule">期望社保购买时间</label>
+                  <select id="dail_text_expected_insurance_schedule">
+                    <option></option><option>转正购买</option><option>入职购买</option><option>不购买</option>
+                  </select>
+                </div>
+              </form>
+
+            </div>
+            </div> <?--- row --->
+            </div>
+          </div>
+          <?--------------------------------------------------------------->
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="close_dail_content" class="btn btn-default">Close</button>
+          <button type="button" id="save_dail_content" class="btn btn-default">保存</button>
+          <button type="button" id="dail_deeper_communicate" class="btn btn-default">深度沟通</button>
+          <button type="button" id="dail_not_linked" class="btn btn-default">未接通</button>
+          <button type="button" id="dail_candidate" class="btn btn-default"> 拨号</button>
+          <button type="button" id="agree_interview" class="btn btn-default">同意面试</button>
+          <button type="button" id="giveup_interview" class="btn btn-default">放弃面试</button>
+        </div>
+      </div>
+    </div>
+  </div>
